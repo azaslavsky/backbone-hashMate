@@ -29,7 +29,8 @@
 	*/
 	Backbone.History.prototype.start = function(options){
 		//Override checkUrl
-		this.checkUrl = this.checkUrl.bind(this);
+		var prototype = this.prototype || this.__proto__;
+		this.checkUrl = prototype.checkUrl.bind(this);
 
 		//Do the default start procedure
 		var loaded = start.call(this, options);
