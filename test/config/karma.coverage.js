@@ -16,6 +16,9 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'test/lib/polyfill/*.js',
+      'node_modules/jquery/dist/jquery.min.js',
+      'node_modules/underscore/underscore-min.js',
+      'node_modules/backbone/backbone-min.js',
       'src/**/*.js',
       'test/spec/**/*.js',
     ],
@@ -59,7 +62,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
 
 
     // enable / disable watching file and executing tests whenever any file changes
@@ -68,28 +71,13 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome', 'ChromeCanary', 'Firefox', 'FirefoxDeveloper', 'IE11', 'IE10', 'IE9'], // Compatibility tests
+    browsers: ['Chrome'],
+
 
     // browser latency settings
     browserDisconnectTimeout: 1000,
     browserDisconnectTolerance: 2,
     browserNoActivityTimeout: 6000,
-
-    // enable ie emulation
-    customLaunchers: {
-      IE11: {
-        base: 'IE',
-        'x-ua-compatible': 'IE=edge'
-      },
-      IE10: {
-        base: 'IE',
-        'x-ua-compatible': 'IE=10'
-      },
-      IE9: {
-        base: 'IE',
-        'x-ua-compatible': 'IE=9'
-      },
-    },
 
 
     // Continuous Integration mode
