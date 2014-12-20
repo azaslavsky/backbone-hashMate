@@ -16,6 +16,9 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'test/lib/polyfill/*.js',
+      'node_modules/jquery/dist/jquery.min.js',
+      'node_modules/underscore/underscore-min.js',
+      'node_modules/backbone/backbone-min.js',
       'src/**/*.js',
       'test/spec/**/*.js',
     ],
@@ -52,12 +55,14 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome', 'ChromeCanary', 'Firefox', 'FirefoxDeveloper', 'IE11', 'IE10', 'IE9'], // Compatibility tests
+    browsers: ['Chrome', 'ChromeCanary', 'Firefox', 'FirefoxDeveloper', 'IE11', 'IE10'], // Compatibility tests
+
 
     // browser latency settings
     browserDisconnectTimeout: 1000,
     browserDisconnectTolerance: 2,
     browserNoActivityTimeout: 6000,
+
 
     // enable ie emulation
     customLaunchers: {
@@ -69,10 +74,10 @@ module.exports = function(config) {
         base: 'IE',
         'x-ua-compatible': 'IE=10'
       },
-      IE9: {
+      /*IE9: {
         base: 'IE',
         'x-ua-compatible': 'IE=9'
-      },
+      },*/
     },
 
 

@@ -1,5 +1,6 @@
 //Use hash events with Backbone.History's pushState enabled
 (function(root, factory) {
+	/* istanbul ignore next */
 	if (typeof define === 'function' && define.amd) { //AMD
 		define(['underscore', 'backbone'], function(_, Backbone) {
 			return factory(root, Backbone, _);
@@ -25,12 +26,15 @@
 	/**
 	 * Extension of the default startup functionality
 	 * @method
-	 * @param {options} options The default options object, but if both pushState and hashChange are true, it will enable router reaction to hash changes as well as popstate events
+	 * @param {options} options The default options object, but if both pushState and hashMate are true, it will enable router reaction to hash changes as well as popstate events
 	*/
 	Backbone.History.prototype.start = function(options){
 		//Override checkUrl
 		var prototype = this.prototype || this.__proto__;
 		this.checkUrl = prototype.checkUrl.bind(this);
+
+		//If "options.hashMate" is true, ensure that options.hashchange is true as well
+		options.hashChange = options.hashMate ? true : options.hashChange;
 
 		//Do the default start procedure
 		var loaded = start.call(this, options);
@@ -51,9 +55,7 @@
 	 * @method
 	*/
 	Backbone.History.prototype.checkUrl = function(e){
-		var newFrag = this.getFragment();
-		var newHash = this.getHashString();
-		if (newFrag === this.fragment && newHash === this.hashString) {
+		if ( this.getFragment() === this.fragment && (this.hashString === this.getHashString() || !this.options.hashMate) ) {
 			return false;
 		}
 
@@ -69,15 +71,13 @@
 	 * Extension of the default navigation functionality
 	 * @method
 	 * @param {string} fragment The new fragment
-	 * @param {bbolean|Object} [opts.clear=false] True means we clear the entire string, false means we clear nothing
-	 * @param {bbolean|string[]} [opts.clear.globals=false] Setting true will clear all global variables, or an array can be specified for more granular deletion
-	 * @param {bbolean|string[]} [opts.clear.groups=false] Setting true will clear all prefixed variables, or an array can be specified for more granular deletion
-	 * @param {bbolean} [opts.force=false] True forces 
-	 * @param {string|Object} [opts.hash] Either an encoded string or a key->value dictionary of hash parameters to be changed along with the fragment; will be applied after the "clear" variables are processed
-	 * @param {bbolean} [opts.replace=false] No optons means we clear the entire string
-	 * @param {bbolean} [opts.trigger=false] No optons means we clear the entire string
-	 * @param {string|string[]|boolean} [opts.groups=false] True means clear all grouped parameters; can also be array of specific groups to clear
-	 * @param {string|string[]|boolean} [opts.globals=false] True means clear all global parameters; can also be array of specific parameters to clear
+	 * @param {bbolean|Object} [opts.clearHash=false] True means we reset the entire hash, false means that nothing is cleared
+	 * @param {bbolean|string[]} [opts.clearHash.globals=false] Setting true will clear all global variables, or an array can be specified for more granular deletion
+	 * @param {bbolean|string[]} [opts.clearHash.groups=false] Setting true will clear all prefixed variables, or an array can be specified for more granular deletion
+	 * @param {string|Object} [opts.addHash] Either an encoded string or a key->value dictionary of hash parameters to be changed along with the fragment; this will be applied after the "clear" variables are processed
+	 * @param {bbolean} [opts.forceTrigger=false] True forces a triggered URL to load, even if the URL matches the current one; this will not work with "replace," only with "trigger" operations!
+	 * @param {bbolean} [opts.replace=false] Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate
+	 * @param {bbolean} [opts.trigger=false] Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate
 	*/
 	Backbone.History.prototype.navigate = function(fragment, opts){
 		opts = opts || {};
@@ -87,13 +87,13 @@
 		this.navigationInProgress = true;
 
 		//Make any requested deletions
-		hash = opts.clear && this.clearHash( typeof opts.clear === 'object' ? _.extend(opts.clear, {apply: false}) : {apply: false} );
+		hash = opts.clearHash && this.clearHash( typeof opts.clearHash === 'object' ? _.extend(opts.clearHash, {apply: false}) : {apply: false} );
 
 		//Extend the hash with the new additions, if available
-		hash = opts.hash ? this.setHash(opts.hash, hash) : this.getHashString(hash);
+		hash = (opts.clearHash || opts.addHash) ? this.setHash(opts.addHash, hash, {apply: true}) : this.getHashString(hash);
 
-		if (opts.force) {
-			//Force a navigation action, even if the fragment is exactly the same
+		if (opts.forceTrigger) {
+			//Force a navigation action, even if the fragment and hash are exactly the same
 			this.fragment = '';
 		} else if ( this.fragment === fragment && hash === this.hashString ) {
 			//If both the hash AND the fragment match, call the whole thing off
@@ -129,6 +129,7 @@
 		opts.globals = typeof opts.globals === 'string' ? [opts.globals] : opts.globals;
 		var params = this.parseHashString(opts.target);
 
+
 		//Cycle through each parameter, deleting it if necessary
 		if (opts.groups || opts.globals) {
 			var type, test;
@@ -142,8 +143,12 @@
 					delete params[k];
 				}
 			}
+
+			//If we've emptied out the parameters, set the variable to null
+			if (params && !Object.keys(params).length) {
+				params = null;
+			}
 		} else {
-			//There are no groups or globals specified - clear everything!
 			params = null;
 		}
 
@@ -230,9 +235,9 @@
 	 * @param {string|Object} params Either an encoded URI string or a key value object representing hash parameters and their respective values
 	 * @param {string} [target] The hash string that is being updated - this will default to window.location.hash if omitted
 	 * @param {Object} [opts] Some options
-	 * @param {boolean} [opts.apply=false] If true, we'll just set the window.location.hash variable directly; otherwise, that responsibility falls to whatever function called this method; if target is set, this will be forced into a false state
+	 * @param {boolean} [opts.apply=false] If true, we'll just set the window.location.hash variable directly; otherwise, that responsibility falls to whatever function called this method
 	 * @param {boolean} [opts.replace=false] If true, replace URL instead of updating it, preventing a new history state from being recorded
-	 * @param {boolean} [opts.retrunLiteral=false] If true, instead of returning the processed string, this function will return the literal that it was compiled from
+	 * @param {boolean} [opts.retrunLiteral=false] If true, instead of returning the processed string, this function will return the object literal that it was compiled from
 	 * @retrurn {Object} The new hash string
 	*/
 	Backbone.History.prototype.setHash = function(params, target, opts){
@@ -242,9 +247,9 @@
 			target = null;
 		}
 		opts = opts || {};
-		opts.apply = target ? false : (opts.apply ? opts.apply : false);
+		opts.apply = opts.apply || false;
 		target = this.getHashString(target);
-		params = (typeof params === 'string') ? this.parseHashString(params) : params;
+		params = (typeof params === 'string') ? this.parseHashString(params) : (params || '');
 
 		//Parse existing hash string into its consituent parameters
 		var existing = this.parseHashString(target);
@@ -312,11 +317,11 @@
 	/**
 	 * Grab the current hash string
 	 * @method
-	 * @param {Object} [string] A hash string to return, which will default wo window.location.hash if not provided
+	 * @param {Object} [string] A hash string to return, which will default to window.location.hash if not provided
 	 * @retrurn {Object}The hash string, with the leading hash symbol symbol removed
 	*/
 	Backbone.History.prototype.getHashString = function(string){
-		return (string || this.getHash(window)).replace(/^#/, '');
+		return (typeof string === 'string' ? string : this.getHash(window)).replace(/^#/, '');
 	};
 
 
@@ -336,10 +341,12 @@
 			for (var k in params) {
 				if (params[k].length) {
 					encoded.push( k +'='+ encodeURIComponent(params[k]) );
+				} else {
+					encoded.push( k );
 				}
 			}
 		}
-		encoded = encoded.join('&');
+		encoded = encoded && encoded.length ? encoded.join('&') : '';
 
 		//Apply if necessary, and return
 		opts = opts || {};
