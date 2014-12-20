@@ -25,12 +25,15 @@
 	/**
 	 * Extension of the default startup functionality
 	 * @method
-	 * @param {options} options The default options object, but if both pushState and hashChange are true, it will enable router reaction to hash changes as well as popstate events
+	 * @param {options} options The default options object, but if both pushState and hashMate are true, it will enable router reaction to hash changes as well as popstate events
 	*/
 	Backbone.History.prototype.start = function(options){
 		//Override checkUrl
 		var prototype = this.prototype || this.__proto__;
 		this.checkUrl = prototype.checkUrl.bind(this);
+
+		//If "options.hashMate" is true, ensure that options.hashchange is true as well
+		options.hashChange = options.hashMate ? true : options.hashChange;
 
 		//Do the default start procedure
 		var loaded = start.call(this, options);
@@ -51,9 +54,7 @@
 	 * @method
 	*/
 	Backbone.History.prototype.checkUrl = function(e){
-		var newFrag = this.getFragment();
-		var newHash = this.getHashString();
-		if (newFrag === this.fragment && newHash === this.hashString) {
+		if ( this.getFragment() === this.fragment && (this.hashString === this.getHashString() || !this.options.hashMate) ) {
 			return false;
 		}
 
@@ -312,7 +313,7 @@
 	/**
 	 * Grab the current hash string
 	 * @method
-	 * @param {Object} [string] A hash string to return, which will default wo window.location.hash if not provided
+	 * @param {Object} [string] A hash string to return, which will default to window.location.hash if not provided
 	 * @retrurn {Object}The hash string, with the leading hash symbol symbol removed
 	*/
 	Backbone.History.prototype.getHashString = function(string){
