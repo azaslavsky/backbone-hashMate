@@ -53,10 +53,10 @@ gulp.task('jasmine', function() {
 });
 
 //Basic unit testing
-gulp.task('unit-phantom', function(done) {
-	unitOpts.browsers = ['PhantomJS'];
+gulp.task('unit-chrome', function(done) {
+	unitOpts.browsers = ['Chrome'];
 	unitOpts.htmlReporter = {
-		outputFile: 'test/results/spec/phantom.html'
+		outputFile: 'test/results/spec/chrome.html'
 	};
 
 	return karma.start(unitOpts, done);
@@ -64,7 +64,7 @@ gulp.task('unit-phantom', function(done) {
 
 //Unit for browser compatibility
 gulp.task('unit-browsers', function(done) {
-	unitOpts.browsers = ['PhantomJS', 'Chrome', 'ChromeCanary', 'Firefox', 'FirefoxDeveloper', 'IE11', 'IE10', 'IE9'];
+	unitOpts.browsers = ['Chrome', 'ChromeCanary', 'Firefox', 'FirefoxDeveloper', 'IE11', 'IE10', 'IE9'];
 	unitOpts.htmlReporter = {
 		outputFile: 'test/results/spec/compatibility.html'
 	};
@@ -76,7 +76,7 @@ gulp.task('unit-browsers', function(done) {
 gulp.task('karma-coverage', function(done) {
 	var opts = {
 		configFile: __dirname+'/test/config/karma.coverage.js',
-		browsers: args.browsers ? [args.browsers] : ['PhantomJS'],
+		browsers: args.browsers ? [args.browsers] : ['Chrome'],
 	};
 
 	return karma.start(opts, done);
@@ -84,7 +84,7 @@ gulp.task('karma-coverage', function(done) {
 
 //Test for basic completeness and coverage
 gulp.task('coverage', ['karma-coverage'], function() {
-	return gulp.src(['./test/results/coverage/Phantom*']) //'+ args.browser ? args.browser : 'Phantom' +'
+	return gulp.src(['./test/results/coverage/Chrome*']) //'+ args.browser ? args.browser : 'Chrome' +'
 		.pipe(forEach(function(stream, file){
 			fs.copySync(file.path, splitPath(file.path).path.join('\\'));
 			fs.removeSync(file.path);
