@@ -14,7 +14,6 @@ var coveralls = require('gulp-coveralls');
 var doc = require('gulp-jsdoc-to-markdown');
 var forEach = require('gulp-foreach');
 var karma = require('karma').server;
-var nightwatch = require('gulp-nightwatch');
 var open = require('gulp-open');
 var regrep = require('gulp-regex-replace');
 var rename = require('gulp-rename');
