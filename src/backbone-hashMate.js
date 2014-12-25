@@ -305,6 +305,8 @@
 			v = v.split('=');
 			if (v.length === 2 && v[0].length && v[1].length) {
 				hashes[v[0]] = decodeURIComponent(v[1]);
+			} else if (v.length === 1 && v[0].length) {
+				hashes[v[0]] = '';
 			}
 		});
 
@@ -321,7 +323,7 @@
 	 * @retrurn {Object}The hash string, with the leading hash symbol symbol removed
 	*/
 	Backbone.History.prototype.getHashString = function(string){
-		return (typeof string === 'string' ? string : this.getHash(window)).replace(/^#/, '');
+		return (typeof string === 'string' ? string : this.getHash(window)).replace(/^#*/g, '');
 	};
 
 
@@ -339,7 +341,10 @@
 		var encoded = [];
 		if (params) {
 			for (var k in params) {
-				if (params[k].length) {
+				if (typeof params[k] === 'boolean' || typeof params[k] === 'number') {
+					params[k] = params[k].toString();
+				}
+				if (typeof params[k] === 'string' && params[k].length) {
 					encoded.push( k +'='+ encodeURIComponent(params[k]) );
 				} else {
 					encoded.push( k );

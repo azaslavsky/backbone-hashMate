@@ -70,6 +70,87 @@
 
 
 
+		describe('Extended Backbone.History API functionality', function(){
+			describe('for getting a whole hash string', function(){
+				it('should return a supplied hash string, without the pound symbol', function(){
+					expect(Backbone.history.getHashString('###abc')).toBe('abc');
+				});
+
+				it('should return the window\'s currently set hash value if the supplied argument is omitted or incorrect', function(){
+					window.location.hash = 'test/abc';
+					expect(Backbone.history.getHashString(4)).toBe('test/abc');
+					expect(Backbone.history.getHashString({})).toBe('test/abc');
+					expect(Backbone.history.getHashString()).toBe('test/abc');
+				});
+			});
+
+			describe('for matching a hash string', function(){
+				it('should match two arbitrary strings', function(){
+					expect(Backbone.history.matchHashString('abc/123', 'abc/123')).toBe(true);
+					expect(Backbone.history.matchHashString('abc/123', 'xyz/000')).toBe(false);
+				});
+
+				it('should match an arbitrary string against the current hash string', function(){
+					window.location.hash = 'abc/123';
+					expect(Backbone.history.matchHashString('abc/123')).toBe(true);
+					expect(Backbone.history.matchHashString('xyz/000')).toBe(false);
+				});
+			});
+
+			describe('for parsing a hash string', function(){
+				beforeEach(function(){
+					window.location.hash = 'test/abc=1&test/def=2&xyz';
+
+					this.parsed = Backbone.history.parseHashString();
+				});
+
+				it('should parse both key value pairs and lone keys', function(){
+					expect(this.parsed).toEqual(jasmine.objectContaining({
+						'test/abc': '1',
+						'test/def': '2',
+						'xyz': ''
+					}));
+				});
+
+				it('should produce a JSON compatible object', function(){
+					var tested = JSON.parse(JSON.stringify(this.parsed));
+					expect(tested).toEqual(jasmine.objectContaining({
+						'test/abc': '1',
+						'test/def': '2',
+						'xyz': ''
+					}));
+				});
+			});
+
+			describe('for setting a hash string', function(){
+				it('should be able to set an encoded object of parameters', function(){
+					var str = Backbone.history.setHashString({
+						'test/abc': '1',
+						'xyz': '',
+						'wuv': true,
+						'test/1234': 5,
+						'test/5678': '":"'
+					});
+					expect(str).toBe('test/abc=1&xyz&wuv=true&test/1234=5&test/5678=%22%3A%22');
+				});
+
+				it('should be able to apply the hash string immediately', function(){
+					Backbone.history.setHashString({
+						'test/abc': '1',
+						'xyz': '',
+						'wuv': true,
+						'test/1234': 5,
+						'test/5678': '":"'
+					}, {
+						apply: true
+					});
+					expect(Backbone.history.getHashString()).toBe('test/abc=1&xyz&wuv=true&test/1234=5&test/5678=%22%3A%22');
+				});
+			});
+			});
+		});
+
+
 
 		describe('Native Backbone.History API functionality', function(){
 
