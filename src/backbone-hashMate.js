@@ -71,9 +71,9 @@
 	 * Extension of the default navigation functionality
 	 * @method
 	 * @param {string} fragment The new fragment
-	 * @param {bbolean|Object} [opts.clearHash=false] True means we reset the entire hash, false means that nothing is cleared
-	 * @param {bbolean|string[]} [opts.clearHash.globals=false] Setting true will clear all global variables, or an array can be specified for more granular deletion
-	 * @param {bbolean|string[]} [opts.clearHash.groups=false] Setting true will clear all prefixed variables, or an array can be specified for more granular deletion
+	 * @param {bbolean|Object} [opts.deleteHash=false] True means we reset the entire hash, false means that nothing is cleared
+	 * @param {bbolean|string[]} [opts.deleteHash.globals=false] Setting true will clear all global variables, or an array can be specified for more granular deletion
+	 * @param {bbolean|string[]} [opts.deleteHash.groups=false] Setting true will clear all prefixed variables, or an array can be specified for more granular deletion
 	 * @param {string|Object} [opts.addHash] Either an encoded string or a key->value dictionary of hash parameters to be changed along with the fragment; this will be applied after the "clear" variables are processed
 	 * @param {bbolean} [opts.forceTrigger=false] True forces a triggered URL to load, even if the URL matches the current one; this will not work with "replace," only with "trigger" operations!
 	 * @param {bbolean} [opts.replace=false] Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate
@@ -87,10 +87,10 @@
 		this.navigationInProgress = true;
 
 		//Make any requested deletions
-		hash = opts.clearHash && this.clearHash( typeof opts.clearHash === 'object' ? _.extend(opts.clearHash, {apply: false}) : {apply: false} );
+		hash = opts.deleteHash && this.deleteHash( typeof opts.deleteHash === 'object' ? _.extend(opts.deleteHash, {apply: false}) : {apply: false} );
 
 		//Extend the hash with the new additions, if available
-		hash = (opts.clearHash || opts.addHash) ? this.setHash(opts.addHash, hash, {apply: true}) : this.getHashString(hash);
+		hash = (opts.deleteHash || opts.addHash) ? this.setHash(opts.addHash, hash, {apply: true}) : this.getHashString(hash);
 
 		if (opts.forceTrigger) {
 			//Force a navigation action, even if the fragment and hash are exactly the same
@@ -121,7 +121,7 @@
 	 * @param {string} [opts.target] The hash string that is being updated - this will default to window.location.hash if omitted
 	 * @retrurn {Object} The new hash string
 	*/
-	Backbone.History.prototype.clearHash = function(opts){
+	Backbone.History.prototype.deleteHash = function(opts){
 		//Sort parameters
 		opts = opts || {};
 		opts.apply = opts.target ? false : (typeof opts.apply === 'boolean' ? opts.apply : true);

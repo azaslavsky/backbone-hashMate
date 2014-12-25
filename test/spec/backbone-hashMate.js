@@ -132,7 +132,7 @@
 				it('should be able to clear the entire hash string', function(){
 					window.location.hash = 'test/1';
 					Backbone.history.navigate('a/003', {
-						clearHash: true,
+						deleteHash: true,
 						trigger: true
 					});
 
@@ -143,7 +143,7 @@
 					//Clear all the globals
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/004', {
-						clearHash: {
+						deleteHash: {
 							globals: true
 						},
 						trigger: true
@@ -155,7 +155,7 @@
 					//Clear only the 'globalB' global
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/004', {
-						clearHash: {
+						deleteHash: {
 							globals: ['globalB']
 						},
 						trigger: true
@@ -169,7 +169,7 @@
 					//Clear all the groups
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/005', {
-						clearHash: {
+						deleteHash: {
 							groups: true
 						},
 						trigger: true
@@ -181,7 +181,7 @@
 					//Clear only the 'testA' group
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/005', {
-						clearHash: {
+						deleteHash: {
 							groups: ['testA']
 						},
 						trigger: true
@@ -195,7 +195,7 @@
 					//Clear everything
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/006', {
-						clearHash: {
+						deleteHash: {
 							globals: true,
 							groups: true
 						},
@@ -208,7 +208,7 @@
 					//Clear only the 'testB' group and the 'globalA' variable
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/006', {
-						clearHash: {
+						deleteHash: {
 							globals: 'globalA',
 							groups: 'testB'
 						},
