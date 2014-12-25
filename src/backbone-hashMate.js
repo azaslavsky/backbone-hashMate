@@ -184,12 +184,11 @@
 				}
 
 				//Apply appropriate group prefix
-				if (group) {
-					v = v.split('/');
-					if (v.length > 2) {
-						return;
-					}
-					key = v.length === 2 ? group +'/'+ v[1] : group +'/'+ v[0];
+				if (v.indexOf('/') !== v.lastIndexOf('/')) {
+					return; //We have more than one slash in the key
+				}
+				if (group && v.indexOf('/') === -1) {
+					key = group +'/'+ v[0];
 				}
 
 				//Save the modified key
@@ -203,19 +202,23 @@
 				if (parsed[v]) {
 					values[v] = parsed[v];
 				} else {
-					values[v] = null;
+					values[v] = '';
 				}
 			});
 		} else if (group) {
 			//Only return the hash parameters for a particular group
 			for (var k in parsed) {
 				if (k.indexOf(group +'/') === 0) {
-					values[k] = parsed[k]
+					values[k] = parsed[k];
 				}
 			}
  		} else {
- 			//Return all the hash parameters
- 			return parsed;
+ 			//Return all the global hash parameters
+ 			for (var k in parsed) {
+				if (k.indexOf('/') === -1) {
+					values[k] = parsed[k];
+				}
+			}
  		}
 
 		//Return the hashString

@@ -105,20 +105,20 @@
 				});
 
 				it('should parse both key value pairs and lone keys', function(){
-					expect(this.parsed).toEqual(jasmine.objectContaining({
+					expect(this.parsed).toEqual({
 						'test/abc': '1',
 						'test/def': '2',
 						'xyz': ''
-					}));
+					});
 				});
 
 				it('should produce a JSON compatible object', function(){
 					var tested = JSON.parse(JSON.stringify(this.parsed));
-					expect(tested).toEqual(jasmine.objectContaining({
+					expect(tested).toEqual({
 						'test/abc': '1',
 						'test/def': '2',
 						'xyz': ''
-					}));
+					});
 				});
 			});
 
@@ -147,6 +147,92 @@
 					expect(Backbone.history.getHashString()).toBe('test/abc=1&xyz&wuv=true&test/1234=5&test/5678=%22%3A%22');
 				});
 			});
+
+			describe('for setting hash parameters', function(){
+				beforeEach(function(){
+					window.location.hash = 'alpha/a=1&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz';
+				});
+
+				it('should update an existing hash value', function(){
+					expect(Backbone.history.setHash({
+						'alpha/a': 'success'
+					})).toBe('alpha/a=success&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz');
+				});
+
+				it('should create a new hash value', function(){
+					expect(Backbone.history.setHash({
+						'alpha/c': 'success'
+					})).toBe('alpha/a=1&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz&alpha/c=success');
+				});
+
+				it('should accept both strings and object literals', function(){
+					expect(Backbone.history.setHash({
+						'alpha/c': 'success'
+					})).toBe('alpha/a=1&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz&alpha/c=success');
+					expect(Backbone.history.setHash('alpha/c=success&beta/c=win')).toBe('alpha/a=1&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz&alpha/c=success&beta/c=win');
+				});
+
+				it('should be able to return both a JSON-literal and stringified representation of the results', function(){
+					expect(Backbone.history.setHash({
+						'alpha/c': 'success'
+					}, {
+						returnLiteral: true
+					})).toEqual({
+						'alpha/a': '1',
+						'alpha/b': '2',
+						'alpha/c': 'success',
+						'beta/a': '3',
+						'beta/b': '4',
+						'abc': 'value',
+						'xyz': '',
+					});
+				});
+
+				it('should apply to window.location by defualt, but also be able to set on arbitrary strings', function(){
+					expect(Backbone.history.setHash({
+						'c': 'success'
+					}, 'a=5&b=6')).toBe('a=5&b=6&c=success');
+				});
+			});
+
+			describe('for plucking hash parameters', function(){
+				beforeEach(function(){
+					window.location.hash = 'alpha/a=1&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz';
+				});
+
+				it('should return an object containing all the global hash values', function(){
+					expect(Backbone.history.pluckHash()).toEqual({
+						'abc': 'value',
+						'xyz': ''
+					});
+				});
+
+				it('should return an object containing a specified global hash value', function(){
+					expect(Backbone.history.pluckHash('abc')).toBe('value');
+					expect(Backbone.history.pluckHash('xyz')).toBe('');
+				});
+
+				it('should return an object containing all the hash values from a certain group', function(){
+					expect(Backbone.history.pluckHash(null, 'alpha')).toEqual({
+						'alpha/a': '1',
+						'alpha/b': '2'
+					});
+				});
+
+				it('should return an object containing the specified hash value from a certain group', function(){
+					expect(Backbone.history.pluckHash('a', 'alpha')).toBe('1');
+					expect(Backbone.history.pluckHash('b', 'alpha')).toBe('2');
+				});
+
+				it('should return a mixed set of specified hash parameters', function(){
+					expect(Backbone.history.pluckHash('beta/a')).toBe('3');
+					expect(Backbone.history.pluckHash('beta/a')).toBe('3');
+					expect(Backbone.history.pluckHash(['alpha/b', 'beta/a', 'fake/disallowed/value', '', 'xyz'])).toEqual({
+						'alpha/b': '2',
+						'beta/a': '3',
+						'xyz': ''
+					});
+				});
 			});
 		});
 
