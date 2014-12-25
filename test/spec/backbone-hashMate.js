@@ -70,6 +70,173 @@
 
 
 
+		describe('Extended Backbone.History API functionality', function(){
+			describe('for getting a whole hash string', function(){
+				it('should return a supplied hash string, without the pound symbol', function(){
+					expect(Backbone.history.getHashString('###abc')).toBe('abc');
+				});
+
+				it('should return the window\'s currently set hash value if the supplied argument is omitted or incorrect', function(){
+					window.location.hash = 'test/abc';
+					expect(Backbone.history.getHashString(4)).toBe('test/abc');
+					expect(Backbone.history.getHashString({})).toBe('test/abc');
+					expect(Backbone.history.getHashString()).toBe('test/abc');
+				});
+			});
+
+			describe('for matching a hash string', function(){
+				it('should match two arbitrary strings', function(){
+					expect(Backbone.history.matchHashString('abc/123', 'abc/123')).toBe(true);
+					expect(Backbone.history.matchHashString('abc/123', 'xyz/000')).toBe(false);
+				});
+
+				it('should match an arbitrary string against the current hash string', function(){
+					window.location.hash = 'abc/123';
+					expect(Backbone.history.matchHashString('abc/123')).toBe(true);
+					expect(Backbone.history.matchHashString('xyz/000')).toBe(false);
+				});
+			});
+
+			describe('for parsing a hash string', function(){
+				beforeEach(function(){
+					window.location.hash = 'test/abc=1&test/def=2&xyz';
+
+					this.parsed = Backbone.history.parseHashString();
+				});
+
+				it('should parse both key value pairs and lone keys', function(){
+					expect(this.parsed).toEqual({
+						'test/abc': '1',
+						'test/def': '2',
+						'xyz': ''
+					});
+				});
+
+				it('should produce a JSON compatible object', function(){
+					var tested = JSON.parse(JSON.stringify(this.parsed));
+					expect(tested).toEqual({
+						'test/abc': '1',
+						'test/def': '2',
+						'xyz': ''
+					});
+				});
+			});
+
+			describe('for setting a hash string', function(){
+				it('should be able to set an encoded object of parameters', function(){
+					var str = Backbone.history.setHashString({
+						'test/abc': '1',
+						'xyz': '',
+						'wuv': true,
+						'test/1234': 5,
+						'test/5678': '":"'
+					});
+					expect(str).toBe('test/abc=1&xyz&wuv=true&test/1234=5&test/5678=%22%3A%22');
+				});
+
+				it('should be able to apply the hash string immediately', function(){
+					Backbone.history.setHashString({
+						'test/abc': '1',
+						'xyz': '',
+						'wuv': true,
+						'test/1234': 5,
+						'test/5678': '":"'
+					}, {
+						apply: true
+					});
+					expect(Backbone.history.getHashString()).toBe('test/abc=1&xyz&wuv=true&test/1234=5&test/5678=%22%3A%22');
+				});
+			});
+
+			describe('for setting hash parameters', function(){
+				beforeEach(function(){
+					window.location.hash = 'alpha/a=1&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz';
+				});
+
+				it('should update an existing hash value', function(){
+					expect(Backbone.history.setHash({
+						'alpha/a': 'success'
+					})).toBe('alpha/a=success&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz');
+				});
+
+				it('should create a new hash value', function(){
+					expect(Backbone.history.setHash({
+						'alpha/c': 'success'
+					})).toBe('alpha/a=1&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz&alpha/c=success');
+				});
+
+				it('should accept both strings and object literals', function(){
+					expect(Backbone.history.setHash({
+						'alpha/c': 'success'
+					})).toBe('alpha/a=1&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz&alpha/c=success');
+					expect(Backbone.history.setHash('alpha/c=success&beta/c=win')).toBe('alpha/a=1&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz&alpha/c=success&beta/c=win');
+				});
+
+				it('should be able to return both a JSON-literal and stringified representation of the results', function(){
+					expect(Backbone.history.setHash({
+						'alpha/c': 'success'
+					}, {
+						returnLiteral: true
+					})).toEqual({
+						'alpha/a': '1',
+						'alpha/b': '2',
+						'alpha/c': 'success',
+						'beta/a': '3',
+						'beta/b': '4',
+						'abc': 'value',
+						'xyz': '',
+					});
+				});
+
+				it('should apply to window.location by defualt, but also be able to set on arbitrary strings', function(){
+					expect(Backbone.history.setHash({
+						'c': 'success'
+					}, 'a=5&b=6')).toBe('a=5&b=6&c=success');
+				});
+			});
+
+			describe('for plucking hash parameters', function(){
+				beforeEach(function(){
+					window.location.hash = 'alpha/a=1&alpha/b=2&beta/a=3&beta/b=4&abc=value&xyz';
+				});
+
+				it('should return an object containing all the global hash values', function(){
+					expect(Backbone.history.pluckHash()).toEqual({
+						'abc': 'value',
+						'xyz': ''
+					});
+				});
+
+				it('should return an object containing a specified global hash value', function(){
+					expect(Backbone.history.pluckHash('abc')).toBe('value');
+					expect(Backbone.history.pluckHash('xyz')).toBe('');
+				});
+
+				it('should return an object containing all the hash values from a certain group', function(){
+					expect(Backbone.history.pluckHash(null, 'alpha')).toEqual({
+						'alpha/a': '1',
+						'alpha/b': '2'
+					});
+				});
+
+				it('should return an object containing the specified hash value from a certain group', function(){
+					expect(Backbone.history.pluckHash('a', 'alpha')).toBe('1');
+					expect(Backbone.history.pluckHash('b', 'alpha')).toBe('2');
+				});
+
+				it('should return a mixed set of specified hash parameters', function(){
+					expect(Backbone.history.pluckHash('beta/a')).toBe('3');
+					expect(Backbone.history.pluckHash('beta/a')).toBe('3');
+					expect(Backbone.history.pluckHash(['alpha/b', 'beta/a', 'fake/disallowed/value', '', 'xyz'])).toEqual({
+						'alpha/b': '2',
+						'beta/a': '3',
+						'xyz': ''
+					});
+				});
+			});
+		});
+
+
 
 		describe('Native Backbone.History API functionality', function(){
 
@@ -132,7 +299,7 @@
 				it('should be able to clear the entire hash string', function(){
 					window.location.hash = 'test/1';
 					Backbone.history.navigate('a/003', {
-						clearHash: true,
+						deleteHash: true,
 						trigger: true
 					});
 
@@ -143,7 +310,7 @@
 					//Clear all the globals
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/004', {
-						clearHash: {
+						deleteHash: {
 							globals: true
 						},
 						trigger: true
@@ -155,7 +322,7 @@
 					//Clear only the 'globalB' global
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/004', {
-						clearHash: {
+						deleteHash: {
 							globals: ['globalB']
 						},
 						trigger: true
@@ -169,7 +336,7 @@
 					//Clear all the groups
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/005', {
-						clearHash: {
+						deleteHash: {
 							groups: true
 						},
 						trigger: true
@@ -181,7 +348,7 @@
 					//Clear only the 'testA' group
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/005', {
-						clearHash: {
+						deleteHash: {
 							groups: ['testA']
 						},
 						trigger: true
@@ -195,7 +362,7 @@
 					//Clear everything
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/006', {
-						clearHash: {
+						deleteHash: {
 							globals: true,
 							groups: true
 						},
@@ -208,7 +375,7 @@
 					//Clear only the 'testB' group and the 'globalA' variable
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/006', {
-						clearHash: {
+						deleteHash: {
 							globals: 'globalA',
 							groups: 'testB'
 						},
