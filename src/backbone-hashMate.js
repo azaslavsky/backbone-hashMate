@@ -30,7 +30,6 @@
 
 	/**
 	 * @namespace Backbone
-	 * @ignore
 	*/
 	/**
 	 * @class Backbone.History

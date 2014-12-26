@@ -2,18 +2,18 @@
 ## API
 **Members**
 
-* [Backbone](## API)
-  * [class: Backbone.History](## API.History)
-    * [history.start(options)](## API.History#start)
-    * [history.checkUrl()](## API.History#checkUrl)
-    * [history.navigate(fragment)](## API.History#navigate)
-    * [history.deleteHash([opts])](## API.History#deleteHash)
-    * [history.pluckHash([params], [group])](## API.History#pluckHash)
-    * [history.setHash(params, [target], [opts])](## API.History#setHash)
-    * [history.matchHashString(stringA, [stringB])](## API.History#matchHashString)
-    * [history.parseHashString([string])](## API.History#parseHashString)
-    * [history.getHashString([string])](## API.History#getHashString)
-    * [history.setHashString(params, [opts])](## API.History#setHashString)
+* [Backbone](#Backbone)
+  * [class: Backbone.History](#Backbone.History)
+    * [history.start(options)](#Backbone.History#start)
+    * [history.checkUrl()](#Backbone.History#checkUrl)
+    * [history.navigate(fragment)](#Backbone.History#navigate)
+    * [history.deleteHash([opts])](#Backbone.History#deleteHash)
+    * [history.pluckHash([params], [group])](#Backbone.History#pluckHash)
+    * [history.setHash(params, [target], [opts])](#Backbone.History#setHash)
+    * [history.matchHashString(stringA, [stringB])](#Backbone.History#matchHashString)
+    * [history.parseHashString([string])](#Backbone.History#parseHashString)
+    * [history.getHashString([string])](#Backbone.History#getHashString)
+    * [history.setHashString(params, [opts])](#Backbone.History#setHashString)
 
 <a name="Backbone.History"></a>
 
@@ -23,17 +23,17 @@ An extended version of the default Backbone.History API
 
 **Members**
 
-* [class: Backbone.History](## API.History)
-  * [history.start(options)](## API.History#start)
-  * [history.checkUrl()](## API.History#checkUrl)
-  * [history.navigate(fragment)](## API.History#navigate)
-  * [history.deleteHash([opts])](## API.History#deleteHash)
-  * [history.pluckHash([params], [group])](## API.History#pluckHash)
-  * [history.setHash(params, [target], [opts])](## API.History#setHash)
-  * [history.matchHashString(stringA, [stringB])](## API.History#matchHashString)
-  * [history.parseHashString([string])](## API.History#parseHashString)
-  * [history.getHashString([string])](## API.History#getHashString)
-  * [history.setHashString(params, [opts])](## API.History#setHashString)
+* [class: Backbone.History](#Backbone.History)
+  * [history.start(options)](#Backbone.History#start)
+  * [history.checkUrl()](#Backbone.History#checkUrl)
+  * [history.navigate(fragment)](#Backbone.History#navigate)
+  * [history.deleteHash([opts])](#Backbone.History#deleteHash)
+  * [history.pluckHash([params], [group])](#Backbone.History#pluckHash)
+  * [history.setHash(params, [target], [opts])](#Backbone.History#setHash)
+  * [history.matchHashString(stringA, [stringB])](#Backbone.History#matchHashString)
+  * [history.parseHashString([string])](#Backbone.History#parseHashString)
+  * [history.getHashString([string])](#Backbone.History#getHashString)
+  * [history.setHashString(params, [opts])](#Backbone.History#setHashString)
 
 <a name="Backbone.History#start"></a>
 
