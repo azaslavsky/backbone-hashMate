@@ -1,7 +1,7 @@
 
 ## Usage
 
-While the full API for hashMate is quite robust, allowing for very detailed use of the library, really there are only three steps to creating a hashMate enabled app.  First, after loading both backbone and the backbone-hashMate library (in that order), Backbone's history is initialized using `Backbone.history.start()` exactly as described [here](http://backbonejs.org/#History-start), with the additional `hashMate: true` property in the options to activate hashMate.  It's also important to remember that hashMate does not support `hashChange` style hashbang handling at this time, and only [supports `pushState` enabled browsers](#Warnings),
+While the full API for hashMate is quite robust, allowing for very detailed use of the library, really there are only three steps to creating a hashMate enabled app.  First, after loading both backbone and the backbone-hashMate library (in that order), Backbone's history is initialized using `Backbone.history.start()` exactly as described [in the Backbone docs](http://backbonejs.org/#History-start), with the additional `hashMate: true` property in the options to activate hashMate.
 
 ```javascript
 Backbone.history.start({
@@ -40,7 +40,7 @@ var MyRouter = Backbone.Router.extend({
 		var params = this._getHashParams('sample');
 		//Do something with the id and params
 		var sampleView = new SampleView({
-			params: 
+			params: params
 		});
 		Backbone.$('body').append(sampleView.el);
 	},

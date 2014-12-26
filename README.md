@@ -18,9 +18,9 @@ Like [jQuery BBQ](http://benalman.com/projects/jquery-bbq-plugin/), but for Back
 
 The purpose of backbone-hashMate is to save information about the position (or state) of either a given resource, or an entire document.  This is most useful in single page apps using something similar to `pushState` to manage history, where over the course of loading many distinct paths, a "backlog" of resource specific and global states might build up that may be useful to save between disparate instances.
 
-For example, suppose that you operate some sort of single page news app at `mynewsapp.com`.  A user has landed on your page, and clicks over to an article, located at `mynewsapp.com/article/1234`.  They then click on a picture in the article, thereby maximizing it.  Then they click on a "share" button below the maximized picture, in order to send that to a friend.  How could we communicate this state - that the picture is maximized, and that it was shared by user XYZ?  Of course, we could make a unique path fragment for this, something like `mynewsapp.com/article/1234/picture/1?referrer=XYZ`, but this carries the risk of hurting SEO by creating [duplicate content](http://moz.com/learn/seo/duplicate-content), since all three of `mynewsapp.com/article/1234`, `mynewsapp.com/article/1234/picture/1`, and `mynewsapp.com/article/1234/picture/1?referrer=XYZ` are describing the same resource to the search engine.
+For example, suppose that you operate some sort of single page news app at `mynewsapp.com`.  A user has landed on your page, and clicks over to an article, located at `mynewsapp.com/article/1234`.  They then click on a picture in the article, thereby maximizing it.  Then they click on a "share" button below the maximized picture, in order to send that to a friend.  How could we communicate this state - that the picture is maximized, and that it was shared by user XYZ?  Of course, we could make a unique path fragment for this, something like `mynewsapp.com/article/1234/picture/1?referrer=XYZ`, but this carries the risk of hurting SEO by creating [duplicate content](http://moz.com/learn/seo/duplicate-content), not to mention muddling resource state into the path fragment.
 
-A better way is to put all of this extra state and location information in the hash.  Our example above could be rewritten like `mynewsapp.com/article/1234#article/picture=1234&&referrer=XYZ`.  Now, the information in the hash fragment is [opaque to crawlers like Google](http://www.oho.com/blog/explained-60-seconds-hash-symbols-urls-and-seo).  Hash fragments are encoded using the exact same URI encoding rules applies to the rest of the URL string, and are split into global parameters (things that apply to any resource on `mynewsapp.com`, like who referred the current user to the page), or resource specific groups (knowing which picture is fullscreened only makes sense for articles, so we group it into the `article/` group).  Using this format creates a logical separation between _unique resources_ (path fragments), and the _states and locations within those resources_ (hashes). 
+A better way is to put all of this extra state and location information in the hash.  Our example above could be rewritten like `mynewsapp.com/article/1234#article/picture=1234&&referrer=XYZ`.  Now, the information in the hash fragment is [opaque to crawlers like Google](http://www.oho.com/blog/explained-60-seconds-hash-symbols-urls-and-seo).  Using this format creates a logical separation between _unique resources_ (path fragments), and the _states and locations within those resources_ (hashes).  Backbone.hashMate streamlines this process for Backbone apps.
 
 ## Installation
 
@@ -45,7 +45,7 @@ or just download this repo manually and include the file as a dependency.  Make 
 
 ## Usage
 
-While the full API for hashMate is quite robust, allowing for very detailed use of the library, really there are only three steps to creating a hashMate enabled app.  First, after loading both backbone and the backbone-hashMate library (in that order), Backbone's history is initialized using `Backbone.history.start()` exactly as described [here](http://backbonejs.org/#History-start), with the additional `hashMate: true` property in the options to activate hashMate.  It's also important to remember that hashMate does not support `hashChange` style hashbang handling at this time, and only [supports `pushState` enabled browsers](#Warnings),
+While the full API for hashMate is quite robust, allowing for very detailed use of the library, really there are only three steps to creating a hashMate enabled app.  First, after loading both backbone and the backbone-hashMate library (in that order), Backbone's history is initialized using `Backbone.history.start()` exactly as described [in the Backbone docs](http://backbonejs.org/#History-start), with the additional `hashMate: true` property in the options to activate hashMate.
 
 ```javascript
 Backbone.history.start({
@@ -84,7 +84,7 @@ var MyRouter = Backbone.Router.extend({
 		var params = this._getHashParams('sample');
 		//Do something with the id and params
 		var sampleView = new SampleView({
-			params: 
+			params: params
 		});
 		Backbone.$('body').append(sampleView.el);
 	},

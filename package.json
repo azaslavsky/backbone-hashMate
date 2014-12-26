@@ -1,7 +1,7 @@
 {
   "name": "backbone-hashmate",
   "author": "Alex Zaslavsky <alex.y.zaslavsky@gmail.com>",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Like jQuery BBQ, but for Backbone. HashMate extends Backbone.Router to store and respond to information contained in the URL's hash fragment. Useful for state management, referral handling, history and more.",
   "contributors": [
     {

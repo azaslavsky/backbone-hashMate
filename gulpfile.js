@@ -125,7 +125,7 @@ gulp.task('bump', ['docs'], function() {
 
 //Copy the original file to the dist folder
 gulp.task('copy', ['bump'], function() {
-	gulp.src(['./src/textStack.js'])
+	gulp.src(['./src/backbone-hashMate.js'])
 		.pipe(gulp.dest('./dist'))
 });
 
