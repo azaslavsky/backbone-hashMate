@@ -19,6 +19,7 @@ var regrep = require('gulp-regex-replace');
 var rename = require('gulp-rename');
 var replace = require('gulp-replace');
 var uglify = require('gulp-uglify');
+var util = require('gulp-util');
 
 
 
@@ -103,14 +104,14 @@ gulp.task('api', function() {
 			path.basename = "API";
 			path.extname = ".md";
 		}))
-		.pipe(replace('##', '###'))
-		.pipe(replace('#class: TextStack', '## API'))
+		.pipe(replace('##', '\n* * *\n###'))
+		.pipe(replace(/\#Backbone/, '## API'))
 		.pipe(gulp.dest('./docs'))
 });
 
 //Make the readme file
 gulp.task('docs', ['api'], function() {
-	gulp.src(['./docs/*.md', 'LICENSE.md'])
+	gulp.src(['./docs/INTRO.md', './docs/EXAMPLES.md', './docs/API.md', './docs/ENDNOTES.md', 'LICENSE.md'])
 		.pipe(concat('README.md'))
 		.pipe(gulp.dest('./'))
 });
