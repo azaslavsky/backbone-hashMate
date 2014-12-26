@@ -43,7 +43,7 @@
 	/**
 	 * Extension of the default startup functionality; wraps the default method, available at: http://backbonejs.org/#History-start
 	 * @method
-	 * @param {options} options The default options object, but if both pushState and hashMate are true, it will enable router reaction to hash changes as well as popstate events
+	 * @param {Object} options The default options object, but if both pushState and hashMate are true, it will enable router reaction to hash changes as well as popstate events
 	 * @memberof Backbone.History
 	*/
 	Backbone.History.prototype.start = function(options){
@@ -92,13 +92,14 @@
 	 * Extension of the default navigation functionality; wraps the default method, available at: http://backbonejs.org/#Router-navigate
 	 * @method
 	 * @param {string} fragment The new fragment
-	 * @param {bbolean|Object} [opts.deleteHash=false] True means we reset the entire hash, false means that nothing is cleared
-	 * @param {bbolean|string[]} [opts.deleteHash.globals=false] Setting true will clear all global variables, or an array can be specified for more granular deletion
-	 * @param {bbolean|string[]} [opts.deleteHash.groups=false] Setting true will clear all prefixed variables, or an array can be specified for more granular deletion
+	 * @param {Object} [opts] An extended version of the default options object, with the following properties available
+	 * @param {boolean|Object} [opts.deleteHash=false] True means we reset the entire hash, false means that nothing is cleared
+	 * @param {boolean|string[]} [opts.deleteHash.globals=false] Setting true will clear all global variables, or an array can be specified for more granular deletion
+	 * @param {boolean|string[]} [opts.deleteHash.groups=false] Setting true will clear all prefixed variables, or an array can be specified for more granular deletion
 	 * @param {string|Object} [opts.addHash] Either an encoded string or a key->value dictionary of hash parameters to be changed along with the fragment; this will be applied after the "clear" variables are processed
-	 * @param {bbolean} [opts.forceTrigger=false] True forces a triggered URL to load, even if the URL matches the current one; this will not work with "replace," only with "trigger" operations!
-	 * @param {bbolean} [opts.replace=false] Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate
-	 * @param {bbolean} [opts.trigger=false] Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate
+	 * @param {boolean} [opts.forceTrigger=false] True forces a triggered URL to load, even if the URL matches the current one; this will not work with "replace," only with "trigger" operations!
+	 * @param {boolean} [opts.replace=false] Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate
+	 * @param {boolean} [opts.trigger=false] Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate
 	 * @memberof Backbone.History
 	*/
 	Backbone.History.prototype.navigate = function(fragment, opts){

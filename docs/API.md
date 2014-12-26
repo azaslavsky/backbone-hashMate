@@ -1,32 +1,12 @@
-<a name="Backbone"></a>
-## API
-**Members**
-
-* [Backbone](#Backbone)
-  * [class: Backbone.History](#Backbone.History)
-    * [history.start(options)](#Backbone.History#start)
-    * [history.checkUrl()](#Backbone.History#checkUrl)
-    * [history.navigate(fragment)](#Backbone.History#navigate)
-    * [history.deleteHash([opts])](#Backbone.History#deleteHash)
-    * [history.pluckHash([params], [group])](#Backbone.History#pluckHash)
-    * [history.setHash(params, [target], [opts])](#Backbone.History#setHash)
-    * [history.matchHashString(stringA, [stringB])](#Backbone.History#matchHashString)
-    * [history.parseHashString([string])](#Backbone.History#parseHashString)
-    * [history.getHashString([string])](#Backbone.History#getHashString)
-    * [history.setHashString(params, [opts])](#Backbone.History#setHashString)
-
-<a name="Backbone.History"></a>
-
-* * *
-###class: Backbone.History
+##API
+###Backbone.History
 An extended version of the default Backbone.History API
 
 **Members**
 
 * [class: Backbone.History](#Backbone.History)
   * [history.start(options)](#Backbone.History#start)
-  * [history.checkUrl()](#Backbone.History#checkUrl)
-  * [history.navigate(fragment)](#Backbone.History#navigate)
+  * [history.navigate(fragment, [opts])](#Backbone.History#navigate)
   * [history.deleteHash([opts])](#Backbone.History#deleteHash)
   * [history.pluckHash([params], [group])](#Backbone.History#pluckHash)
   * [history.setHash(params, [target], [opts])](#Backbone.History#setHash)
@@ -43,31 +23,25 @@ Extension of the default startup functionality; wraps the default method, availa
 
 **Params**
 
-- options `options` - The default options object, but if both pushState and hashMate are true, it will enable router reaction to hash changes as well as popstate events  
+- options `Object` - The default options object, but if both pushState and hashMate are true, it will enable router reaction to hash changes as well as popstate events  
 
-<a name="Backbone.History#checkUrl"></a>
-
-* * *
-####history.checkUrl()
-Replaces the default checkUrl functionality, and is only intended for private consumption
-
-**Access**: private  
 <a name="Backbone.History#navigate"></a>
 
 * * *
-####history.navigate(fragment)
+####history.navigate(fragment, [opts])
 Extension of the default navigation functionality; wraps the default method, available at: http://backbonejs.org/#Router-navigate
 
 **Params**
 
 - fragment `string` - The new fragment  
-  - \[deleteHash=false\] `bbolean` | `Object` - True means we reset the entire hash, false means that nothing is cleared  
-  - \[globals=false\] `bbolean` | `Array.<string>` - Setting true will clear all global variables, or an array can be specified for more granular deletion  
-  - \[groups=false\] `bbolean` | `Array.<string>` - Setting true will clear all prefixed variables, or an array can be specified for more granular deletion  
+- \[opts\] `Object` - An extended version of the default options object, with the following properties available  
+  - \[deleteHash=false\] `boolean` | `Object` - True means we reset the entire hash, false means that nothing is cleared  
+  - \[globals=false\] `boolean` | `Array.<string>` - Setting true will clear all global variables, or an array can be specified for more granular deletion  
+  - \[groups=false\] `boolean` | `Array.<string>` - Setting true will clear all prefixed variables, or an array can be specified for more granular deletion  
   - \[addHash\] `string` | `Object` - Either an encoded string or a key->value dictionary of hash parameters to be changed along with the fragment; this will be applied after the "clear" variables are processed  
-  - \[forceTrigger=false\] `bbolean` - True forces a triggered URL to load, even if the URL matches the current one; this will not work with "replace," only with "trigger" operations!  
-  - \[replace=false\] `bbolean` - Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate  
-  - \[trigger=false\] `bbolean` - Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate  
+  - \[forceTrigger=false\] `boolean` - True forces a triggered URL to load, even if the URL matches the current one; this will not work with "replace," only with "trigger" operations!  
+  - \[replace=false\] `boolean` - Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate  
+  - \[trigger=false\] `boolean` - Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate  
 
 <a name="Backbone.History#deleteHash"></a>
 

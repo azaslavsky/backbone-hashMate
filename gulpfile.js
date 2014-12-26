@@ -105,7 +105,7 @@ gulp.task('api', function() {
 			path.extname = ".md";
 		}))
 		.pipe(replace('##', '\n* * *\n###'))
-		.pipe(replace(/\#Backbone/, '## API'))
+		.pipe(replace(/^[\s\S]*?(?:###class: )/, '##API\n###')) //https://regex101.com/r/hO4fW4/2
 		.pipe(gulp.dest('./docs'))
 });
 

@@ -5,14 +5,14 @@
 Like [jQuery BBQ](http://benalman.com/projects/jquery-bbq-plugin/), but for Backbone.  HashMate extends Backbone.History to store and respond to information contained in the URL's hash fragment.  Useful for state management, referral handling, history, SEO, and more.
 
 ## Jump To
-* [Description](#Description)
-* [Installation](#Installation)
-* [Usage](#Usage)
-* [API](#API)
-* [Warnings](#Warnings)
-* [Tests](#Tests)
-* [Contributing](#Contributing)
-* [License](#License)
+* [Description](#description)
+* [Installation](#installation)
+* [Usage](#usage)
+* [API](#api)
+* [Warnings](#warnings)
+* [Tests](#tests)
+* [Contributing](#contributing)
+* [License](#license)
 
 ## Description
 
