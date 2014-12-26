@@ -8,7 +8,6 @@ var fileServer = new staticAlias.Server('./', {
   alias: {
     match: '/',
     serve: 'test/jasmine.html',
-    allowOutside: true,
     logger: logger
   }
 });
