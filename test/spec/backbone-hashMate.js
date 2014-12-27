@@ -13,21 +13,6 @@
 
 		//A sample router for testing
 		var Router = Backbone.Router.extend({
-			_getHashParams: function(){
-				var stripped;
-				var mapped = {};
-				var hash = Backbone.history.pluckHash(params, 'thread');
-
-				//Remove route prefixes
-				for (var k in hash) {
-					stripped = k.split('/');
-					if (stripped.length === 2) {
-						mapped[stripped[1]] = hash[k];
-					}
-				}
-				return mapped;
-			},
-
 			routes: {
 				'a/:id': 'sampleId',
 				'b': 'sampleHash'
