@@ -97,7 +97,7 @@
 	 * @param {boolean|string[]} [opts.deleteHash.globals=false] Setting true will clear all global variables, or an array can be specified for more granular deletion
 	 * @param {boolean|string[]} [opts.deleteHash.groups=false] Setting true will clear all prefixed variables, or an array can be specified for more granular deletion
 	 * @param {string|Object} [opts.addHash] Either an encoded string or a key->value dictionary of hash parameters to be changed along with the fragment; this will be applied after the "clear" variables are processed
-	 * @param {boolean} [opts.forceTrigger=false] True forces a triggered URL to load, even if the URL matches the current one; this will not work with "replace," only with "trigger" operations!
+	 * @param {boolean} [opts.forceTrigger=false] True forces a triggered URL to load, even if the URL matches the current one; only used it "opts.trigger" is also true
 	 * @param {boolean} [opts.replace=false] Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate
 	 * @param {boolean} [opts.trigger=false] Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate
 	 * @memberof Backbone.History
