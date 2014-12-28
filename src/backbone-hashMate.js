@@ -53,30 +53,47 @@
 
 		//If "options.hashMate" is true, ensure that options.hashchange is true as well
 		options.hashChange = options.hashMate ? true : options.hashChange;
+		this._hasHashMate = !!options.hashMate;
+
+		//For the following function, we want "atRoot" to always return false
+		this._noRootCheck = true;
 
 		//Do the default start procedure
 		var loaded = start.call(this, options);
 
-		//If we are listening to hashChanges, enable that listener as well
-		/*if (this._wantsPushState && this._wantsHashChange && ('onhashchange' in window)) {
-			if (!this.navigationInProgress) {
-				Backbone.$(window).on('hashchange', this.checkUrl);
-			}
-		}*/
+		delete this._noRootCheck;
 		return loaded;
 	};
 
 
 
+	var atRoot = Backbone.History.prototype.atRoot;
 	/**
-	 * Replaces the default checkUrl functionality, and is only intended for private consumption
+	 * Replaces the default atRoot method, always returning false duing the Backbone.start() process while hashMate is enabled
+	 * @method
+	 * @memberof Backbone.History
+	 * @private
+	 * @ignore
+	*/
+	Backbone.History.prototype.atRoot = function(){
+		if (this._hasHashMate && this._noRootCheck) {
+			return false;
+		} else {
+			return atRoot.call(this);
+		}
+	};
+
+
+
+	/**
+	 * Replaces the default checkUrl method, and is only intended for private consumption
 	 * @method
 	 * @memberof Backbone.History
 	 * @private
 	 * @ignore
 	*/
 	Backbone.History.prototype.checkUrl = function(e){
-		if ( this.getFragment() === this.fragment && (this.hashString === this.getHashString() || !this.options.hashMate) ) {
+		if ( this.getFragment() === this.fragment && (this.hashString === this.getHashString() || !this._hasHashMate) ) {
 			return false;
 		}
 
@@ -137,33 +154,41 @@
 	/**
 	 * Clear all or part of the hash
 	 * @method
-	 * @param {Object} [opts] No optons means we clear the entire string
+	 * @param {Object} [opts] No options means we clear the entire string
+	 * @param {string|string[]} [opts.params+false] A string, or an array of them, of specifying a parameter to clear
 	 * @param {string|string[]|boolean} [opts.groups=false] True means clear all grouped parameters; can also be array of specific groups to clear
-	 * @param {string|string[]|boolean} [opts.globals=false] True means clear all global parameters; can also be array of specific parameters to clear
-	 * @param {string|string[]|boolean} [opts.apply=true] True means the actual window.location.hash will be cleared immediately; if opts.target is set, this will be forced into a false state
-	 * @param {string} [opts.target] The hash string that is being updated - this will default to window.location.hash if omitted
+	 * @param {boolean} [opts.globals=false] True means clear all global parameters
+	 * @param {boolean} [opts.apply=true] True means the actual window.location.hash will be cleared immediately; if opts.target is set, this will be forced into a false state
+	 * @param {string} [target] The hash string that is being updated - this will default to window.location.hash if omitted
 	 * @return {Object} The new hash string
 	 * @memberof Backbone.History
 	*/
-	Backbone.History.prototype.deleteHash = function(opts){
+	Backbone.History.prototype.deleteHash = function(opts, target){
 		//Sort parameters
 		opts = opts || {};
-		opts.apply = opts.target ? false : (typeof opts.apply === 'boolean' ? opts.apply : true);
+		opts.apply = target ? false : (typeof opts.apply === 'boolean' ? opts.apply : true);
+		opts.params = typeof opts.params === 'string' ? [opts.params] : opts.params;
 		opts.groups = typeof opts.groups === 'string' ? [opts.groups] : opts.groups;
 		opts.globals = typeof opts.globals === 'string' ? [opts.globals] : opts.globals;
-		var params = this.parseHashString(opts.target);
+		var params = this.parseHashString(target);
 
 
 		//Cycle through each parameter, deleting it if necessary
-		if (opts.groups || opts.globals) {
-			var type, test;
+		if (opts.groups || opts.globals || opts.params) {
+			var groupsArray = opts.groups instanceof Array;
+			var paramsArray = opts.params instanceof Array;;
+			var isGroup;
 			for (var k in params) {
-				type = k.indexOf('/') > -1 ? 'groups' : 'globals';
-				if (opts[type]) {
-					if (opts[type] instanceof Array && opts[type].indexOf( k.split('/')[0] ) === -1) {
+				isGroup = k.indexOf('/') > -1 ? true : false;
+				if (!isGroup && opts.globals) {
+					delete params[k];
+				} else if (isGroup && opts.groups) {
+					if (groupsArray && opts.groups.indexOf( k.split('/')[0] ) === -1) {
 						//This is a group or global variable that was not in the provided list, so ignore its children
 						continue;
 					}
+					delete params[k];
+				} else if (paramsArray && opts.params.indexOf(k) !== -1) {
 					delete params[k];
 				}
 			}
@@ -186,7 +211,7 @@
 	 * Retrieve one or more hash parameters
 	 * @method
 	 * @param {string[]} [params] A string or a list of parameters to extract; not providing it means all parameters (either global or of the requested group) will be returned
-	 * @param {string[]} [group] A string that serves as the group prefix for all provided parameters - if parameters have their own prefix, it will be replaced!
+	 * @param {string[]} [group] A string that serves as the group prefix for all provided parameters - if parameters have their own prefix, it will be overridden!
 	 * @return {string|Object} An object containing the requested hash parameters, or a single value if we only submit a single param
 	 * @memberof Backbone.History
 	*/
@@ -263,7 +288,7 @@
 	 * @param {string|Object} params Either an encoded URI string or a key value object representing hash parameters and their respective values
 	 * @param {string} [target] The hash string that is being updated - this will default to window.location.hash if omitted
 	 * @param {Object} [opts] Some options
-	 * @param {boolean} [opts.apply=false] If true, we'll just set the window.location.hash variable directly; otherwise, that responsibility falls to whatever function called this method
+	 * @param {boolean} [opts.apply=true] If true, we'll just set the window.location.hash variable directly; otherwise, that responsibility falls to whatever function called this method
 	 * @param {boolean} [opts.replace=false] If true, replace URL instead of updating it, preventing a new history state from being recorded
 	 * @param {boolean} [opts.retrunLiteral=false] If true, instead of returning the processed string, this function will return the object literal that it was compiled from
 	 * @return {Object} The new hash string
@@ -276,7 +301,7 @@
 			target = null;
 		}
 		opts = opts || {};
-		opts.apply = opts.apply || false;
+		opts.apply = typeof opts.apply === 'boolean' ? opts.apply : true;
 		target = this.getHashString(target);
 		params = (typeof params === 'string') ? this.parseHashString(params) : (params || '');
 
@@ -365,7 +390,7 @@
 	 * @method
 	 * @param {Object} params A set of key value pairs to combine into a single encoded string, which we can then set as the hash
 	 * @param {Object} [opts] Some options
-	 * @param {boolean} [opts.apply=false] If true, we'll just set the window.location.hash variable directly; otherwise, that responsibility falls to whatever function called this method
+	 * @param {boolean} [opts.apply=true] If true, we'll just set the window.location.hash variable directly; otherwise, that responsibility falls to whatever function called this method
 	 * @param {boolean} [opts.replace=false] If true, replace URL instead of updating it, preventing a new history state from being recorded
 	 * @return {string} The resulting hash string
 	 * @memberof Backbone.History
@@ -388,7 +413,7 @@
 
 		//Apply if necessary, and return
 		opts = opts || {};
-		if (opts.apply) {
+		if (opts.apply !== false) {
 			this._updateHash( (this.location || window.location), encoded, opts.replace);
 			this.hashString = encoded;
 		}

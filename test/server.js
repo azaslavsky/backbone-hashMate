@@ -16,5 +16,5 @@ require('http').createServer(function(request, response) {
   request.addListener('end', function() {
     fileServer.serve(request, response);
   }).resume();
-}).listen(4040);
+}).listen(5050);
 console.log('Server running at http://localhost:4040/');

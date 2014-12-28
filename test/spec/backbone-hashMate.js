@@ -32,7 +32,11 @@
 		//Setup and teardown
 		beforeEach(function(){
 			router = new Router;
-			Backbone.history.start({pushState: true, hashMate: true});
+			Backbone.history.start({
+				root: '/',
+				pushState: true, 
+				hashMate: true
+			});
 		});
 
 		afterEach(function(done){
@@ -239,6 +243,38 @@
 				});
 			});
 
+			describe('for "atRoot" method', function(){
+				it('should always return false when hashMate is enabled and the appropriate flag is set', function(){
+					expect(Backbone.history.atRoot()).toBeTrue();
+
+					Backbone.history._noRootCheck = true;
+					expect(Backbone.history.atRoot()).toBeFalse();
+
+					window.history.replaceState({}, '', '/testing');
+					expect(Backbone.history.atRoot()).toBeFalse();
+
+					Backbone.history._noRootCheck = false;
+					expect(Backbone.history.atRoot()).toBeFalse();
+				});
+
+				it('should retain default functionality when hashMate is loaded, but disabled', function(){
+					Backbone.history.options.hashMate = false;
+					Backbone.history._hasHashMate = false;
+					Backbone.history.options.hashChange = false;
+					Backbone.history._wantsHashChange = false;
+					expect(Backbone.history.atRoot()).toBeTrue();
+
+					Backbone.history._noRootCheck = true;
+					expect(Backbone.history.atRoot()).toBeTrue();
+
+					window.history.replaceState({}, '', '/testing');
+					expect(Backbone.history.atRoot()).toBeFalse();
+
+					Backbone.history._noRootCheck = false;
+					expect(Backbone.history.atRoot()).toBeFalse();
+				});
+			});
+
 			describe('for "checkUrl" method', function(){
 				it('should ignore unchaged URL fragments', function(){
 					window.history.pushState({}, '/test/abc');
@@ -291,7 +327,7 @@
 					expect(window.location.hash.length).toBeLessThan(2); //Accepts either '#' or ''
 				});
 
-				it('should be able to clear one or more global hash parameters', function(){
+				it('should be able to clear all the global hash parameters', function(){
 					//Clear all the globals
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/004', {
@@ -303,18 +339,6 @@
 
 					expect(window.location.pathname).toBe('/a/004');
 					expect(window.location.hash).toBe('#testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta');
-
-					//Clear only the 'globalB' global
-					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
-					Backbone.history.navigate('a/004', {
-						deleteHash: {
-							globals: ['globalB']
-						},
-						trigger: true
-					});
-
-					expect(window.location.pathname).toBe('/a/004');
-					expect(window.location.hash).toBe('#testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon');
 				});
 
 				it('should be able to clear one or more specified grouping of hash parameters', function(){
@@ -343,7 +367,7 @@
 					expect(window.location.hash).toBe('#testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta');
 				});
 
-				it('should be able to clear a combination of groups and global parameters', function(){
+				it('should be able to clear a combination of whole groups and global parameters', function(){
 					//Clear everything
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/006', {
@@ -361,7 +385,7 @@
 					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
 					Backbone.history.navigate('a/006', {
 						deleteHash: {
-							globals: 'globalA',
+							params: 'globalA',
 							groups: 'testB'
 						},
 						trigger: true
@@ -369,6 +393,55 @@
 
 					expect(window.location.pathname).toBe('/a/006');
 					expect(window.location.hash).toBe('#testA/1=alpha&testA/2=beta&globalB=zeta');
+				});
+
+				it('should be able to clear a specific list of parameters', function(){
+					//Clear only the 'testA/1' parameter
+					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
+					Backbone.history.navigate('a/010', {
+						deleteHash: {
+							params: 'testA/1'
+						},
+						trigger: true
+					});
+
+					expect(window.location.pathname).toBe('/a/010');
+					expect(window.location.hash).toBe('#testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta');
+
+					//Clear all the groups, and the 'globalB' parameter
+					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
+					Backbone.history.navigate('a/010', {
+						deleteHash: {
+							params: ['globalA'],
+							groups: true
+						},
+						trigger: true
+					});
+
+					expect(window.location.pathname).toBe('/a/010');
+					expect(window.location.hash).toBe('#globalB=zeta');
+
+					//Clear all the globals, and a mix of specific group parameters
+					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
+					Backbone.history.navigate('a/010', {
+						deleteHash: {
+							params: ['testA/1', 'testB/2'],
+							globals: true
+						},
+						trigger: true
+					});
+
+					//Clear a mix grouped and global of parameters using only the parameters array
+					window.location.hash = 'testA/1=alpha&testA/2=beta&testB/1=gamma&testB/3=delta&globalA=epsilon&globalB=zeta';
+					Backbone.history.navigate('a/010', {
+						deleteHash: {
+							params: ['testA/1', 'testA/2', 'testB/3', 'globalB'],
+						},
+						trigger: true
+					});
+
+					expect(window.location.pathname).toBe('/a/010');
+					expect(window.location.hash).toBe('#testB/1=gamma&globalA=epsilon');
 				});
 
 				it('should be able to set a hash string', function(){
