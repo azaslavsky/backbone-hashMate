@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	window.App.Views.Options = Backbone.View.extend({
+	window.modules.OptionsView = Backbone.View.extend({
 		events: {
 
 		},

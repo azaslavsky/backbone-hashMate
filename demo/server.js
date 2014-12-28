@@ -6,7 +6,7 @@ logger.setLevel(log4js.levels.DEBUG);
 // Document-Root: './public' directory
 var fileServer = new staticAlias.Server('./', {
   alias: {
-    match: '/',
+    match: '/backbone-hashMate/demo',
     serve: 'demo/demo.html',
     logger: logger
   }

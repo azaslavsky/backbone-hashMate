@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	window.App.Views.Article = Backbone.View.extend({
+	window.modules.ArticleView = Backbone.View.extend({
 		events: {
 
 		},

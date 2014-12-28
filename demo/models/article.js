@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	window.App.Models.Article = Backbone.Model.extend({
+	modules.ArticleModel = Backbone.Model.extend({
 		initialize: function() {
 
 		},
