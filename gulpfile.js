@@ -116,16 +116,16 @@ gulp.task('docs', ['api'], function() {
 		.pipe(gulp.dest('./'))
 });
 
-//Bump the version
-gulp.task('bump', ['docs'], function() {
-	gulp.src(['./package.json', './bower.json'])
-		.pipe(bump({type: args.vers || 'patch'}))
-		.pipe(gulp.dest('./'));
-});
-
 //Copy the original file to the dist folder
-gulp.task('copy', ['bump'], function() {
+gulp.task('copy', ['docs'], function() {
 	gulp.src(['./src/backbone-hashMate.js'])
+		.pipe(uglify({
+			output: {
+				beautify: true
+			},
+			compress: false,
+			mangle: false
+		}))
 		.pipe(gulp.dest('./dist'))
 });
 
@@ -137,6 +137,13 @@ gulp.task('build', ['copy'], function() {
 			path.basename += '.min';
 		}))
 		.pipe(gulp.dest('./dist'))
+});
+
+//Build, and bump the version
+gulp.task('bump', ['build'], function() {
+	gulp.src(['./package.json', './bower.json'])
+		.pipe(bump({type: args.vers || 'patch'}))
+		.pipe(gulp.dest('./'));
 });
 
 
