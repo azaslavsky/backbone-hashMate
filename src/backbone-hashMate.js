@@ -184,7 +184,7 @@
 	 * Clear all or part of the hash
 	 * @method
 	 * @param {Object} [opts] No options means we clear the entire string
-	 * @param {string|string[]} [opts.params+false] A string, or an array of them, of specifying a parameter to clear
+	 * @param {string|string[]} [opts.params=false] A string, or an array of them, of specifying a parameter to clear
 	 * @param {string|string[]|boolean} [opts.groups=false] True means clear all grouped parameters; can also be array of specific groups to clear
 	 * @param {boolean} [opts.globals=false] True means clear all global parameters
 	 * @param {boolean} [opts.apply=true] True means the actual window.location.hash will be cleared immediately; if opts.target is set, this will be forced into a false state

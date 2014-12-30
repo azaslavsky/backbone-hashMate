@@ -52,7 +52,7 @@ Clear all or part of the hash
 **Params**
 
 - \[opts\] `Object` - No options means we clear the entire string  
-  - \[params+false\] `string` | `Array.<string>` - A string, or an array of them, of specifying a parameter to clear  
+  - \[params=false\] `string` | `Array.<string>` - A string, or an array of them, of specifying a parameter to clear  
   - \[groups=false\] `string` | `Array.<string>` | `boolean` - True means clear all grouped parameters; can also be array of specific groups to clear  
   - \[globals=false\] `boolean` - True means clear all global parameters  
   - \[apply=true\] `boolean` - True means the actual window.location.hash will be cleared immediately; if opts.target is set, this will be forced into a false state  
