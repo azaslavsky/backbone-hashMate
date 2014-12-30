@@ -1,11 +1,15 @@
 # backbone-hashMate
+=================
 [![License](https://img.shields.io/cocoapods/l/AFNetworking.svg)](https://github.com/azaslavsky/TextStack#license) [![Bower version](https://badge.fury.io/bo/backbone-hashmate.svg)](http://badge.fury.io/bo/backbone-hashmate) [![npm version](https://badge.fury.io/js/backbone-hashmate.svg)](http://badge.fury.io/js/backbone-hashmate) [![Coverage Status](https://img.shields.io/coveralls/azaslavsky/backbone-hashMate.svg)](https://coveralls.io/r/azaslavsky/backbone-hashMate?branch=master) [![Dependencies](https://david-dm.org/azaslavsky/backbone-hashMate/status.svg)](https://david-dm.org/azaslavsky/backbone-hashMate#info=dependencies&view=table) [![Travis Build](https://api.travis-ci.org/azaslavsky/backbone-hashMate.svg)](https://travis-ci.org/azaslavsky/backbone-hashMate) 
+
+__[Check out the demo!](azaslavsky.github.io/backbone-hashMate/demo)__
 
 Like [jQuery BBQ](http://benalman.com/projects/jquery-bbq-plugin/), but for Backbone.  HashMate extends Backbone.History to store and respond to information contained in the URL's hash fragment.  Useful for state management, referral handling, history, SEO, and more.
 
 ## Jump To
 * [Description](#description)
 * [Installation](#installation)
+* [Demo](#demo)
 * [Usage](#usage)
 * [API](#api)
 * [Warnings](#warnings)
@@ -41,6 +45,17 @@ or just download this repo manually and include the file as a dependency.  Make 
 <script src="./lib/backbone.js"></script>
 <script src="./lib/backbone-hashMate.js"></script>
 ```
+
+## Demo
+You can check out a working demo at [azaslavsky.github.io/backbone-hashMate/demo](azaslavsky.github.io/backbone-hashMate/demo).  While this works fine, there is a drawback: since gitbhub pages don't support aliases by default, the only entry point to the single page demo app is at `/backbone-hashMate/demo`.  URLs like `/backbone-hashMate/demo/article/Some_Title` and `/backbone-hashMate/demo/options` return a 404, even though there is routing support for them.
+
+A better way to fire up the demo is to install the repository locally, then run the following in the CLI:
+
+```
+node demo/server.js
+```
+
+Then, point your browser to `localhost:4040/backbone-hashMate/demo`, or any of the other valid paths mentioned above.
 
 ## Usage
 
@@ -111,7 +126,7 @@ Backbone.history.navigate('sample/1234#foo=bar', {
 	trigger: false
 });
 ```
-## API
+##API
 ###Backbone.History
 An extended version of the default Backbone.History API
 
@@ -119,8 +134,8 @@ An extended version of the default Backbone.History API
 
 * [class: Backbone.History](#Backbone.History)
   * [history.start(options)](#Backbone.History#start)
-  * [history.navigate(fragment, [opts])](#Backbone.History#navigate)
-  * [history.deleteHash([opts])](#Backbone.History#deleteHash)
+  * [history.navigate([fragment], [opts])](#Backbone.History#navigate)
+  * [history.deleteHash([opts], [target])](#Backbone.History#deleteHash)
   * [history.pluckHash([params], [group])](#Backbone.History#pluckHash)
   * [history.setHash(params, [target], [opts])](#Backbone.History#setHash)
   * [history.matchHashString(stringA, [stringB])](#Backbone.History#matchHashString)
@@ -141,34 +156,35 @@ Extension of the default startup functionality; wraps the default method, availa
 <a name="Backbone.History#navigate"></a>
 
 * * *
-####history.navigate(fragment, [opts])
+####history.navigate([fragment], [opts])
 Extension of the default navigation functionality; wraps the default method, available at: http://backbonejs.org/#Router-navigate
 
 **Params**
 
-- fragment `string` - The new fragment  
+- \[fragment\] `string` - The new fragment  
 - \[opts\] `Object` - An extended version of the default options object, with the following properties available  
   - \[deleteHash=false\] `boolean` | `Object` - True means we reset the entire hash, false means that nothing is cleared  
   - \[globals=false\] `boolean` | `Array.<string>` - Setting true will clear all global variables, or an array can be specified for more granular deletion  
   - \[groups=false\] `boolean` | `Array.<string>` - Setting true will clear all prefixed variables, or an array can be specified for more granular deletion  
   - \[addHash\] `string` | `Object` - Either an encoded string or a key->value dictionary of hash parameters to be changed along with the fragment; this will be applied after the "clear" variables are processed  
-  - \[forceTrigger=false\] `boolean` - True forces a triggered URL to load, even if the URL matches the current one; this will not work with "replace," only with "trigger" operations!  
+  - \[forceTrigger=false\] `boolean` - True forces a triggered URL to load, even if the URL matches the current one; only used it "opts.trigger" is also true  
   - \[replace=false\] `boolean` - Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate  
   - \[trigger=false\] `boolean` - Works exactly like the default "navigate" implementation, see http://backbonejs.org/#Router-navigate  
 
 <a name="Backbone.History#deleteHash"></a>
 
 * * *
-####history.deleteHash([opts])
+####history.deleteHash([opts], [target])
 Clear all or part of the hash
 
 **Params**
 
-- \[opts\] `Object` - No optons means we clear the entire string  
+- \[opts\] `Object` - No options means we clear the entire string  
+  - \[params+false\] `string` | `Array.<string>` - A string, or an array of them, of specifying a parameter to clear  
   - \[groups=false\] `string` | `Array.<string>` | `boolean` - True means clear all grouped parameters; can also be array of specific groups to clear  
-  - \[globals=false\] `string` | `Array.<string>` | `boolean` - True means clear all global parameters; can also be array of specific parameters to clear  
-  - \[apply=true\] `string` | `Array.<string>` | `boolean` - True means the actual window.location.hash will be cleared immediately; if opts.target is set, this will be forced into a false state  
-  - \[target\] `string` - The hash string that is being updated - this will default to window.location.hash if omitted  
+  - \[globals=false\] `boolean` - True means clear all global parameters  
+  - \[apply=true\] `boolean` - True means the actual window.location.hash will be cleared immediately; if opts.target is set, this will be forced into a false state  
+- \[target\] `string` - The hash string that is being updated - this will default to window.location.hash if omitted  
 
 **Returns**: `Object` - The new hash string  
 <a name="Backbone.History#pluckHash"></a>
@@ -180,7 +196,7 @@ Retrieve one or more hash parameters
 **Params**
 
 - \[params\] `Array.<string>` - A string or a list of parameters to extract; not providing it means all parameters (either global or of the requested group) will be returned  
-- \[group\] `Array.<string>` - A string that serves as the group prefix for all provided parameters - if parameters have their own prefix, it will be replaced!  
+- \[group\] `Array.<string>` - A string that serves as the group prefix for all provided parameters - if parameters have their own prefix, it will be overridden!  
 
 **Returns**: `string` | `Object` - An object containing the requested hash parameters, or a single value if we only submit a single param  
 <a name="Backbone.History#setHash"></a>
@@ -194,7 +210,7 @@ Set one or more hash parameters
 - params `string` | `Object` - Either an encoded URI string or a key value object representing hash parameters and their respective values  
 - \[target\] `string` - The hash string that is being updated - this will default to window.location.hash if omitted  
 - \[opts\] `Object` - Some options  
-  - \[apply=false\] `boolean` - If true, we'll just set the window.location.hash variable directly; otherwise, that responsibility falls to whatever function called this method  
+  - \[apply=true\] `boolean` - If true, we'll just set the window.location.hash variable directly; otherwise, that responsibility falls to whatever function called this method  
   - \[replace=false\] `boolean` - If true, replace URL instead of updating it, preventing a new history state from being recorded  
   - \[retrunLiteral=false\] `boolean` - If true, instead of returning the processed string, this function will return the object literal that it was compiled from  
 
@@ -243,7 +259,7 @@ Apply a new hash string
 
 - params `Object` - A set of key value pairs to combine into a single encoded string, which we can then set as the hash  
 - \[opts\] `Object` - Some options  
-  - \[apply=false\] `boolean` - If true, we'll just set the window.location.hash variable directly; otherwise, that responsibility falls to whatever function called this method  
+  - \[apply=true\] `boolean` - If true, we'll just set the window.location.hash variable directly; otherwise, that responsibility falls to whatever function called this method  
   - \[replace=false\] `boolean` - If true, replace URL instead of updating it, preventing a new history state from being recorded  
 
 **Returns**: `string` - The resulting hash string  
@@ -255,7 +271,7 @@ Some might also take issue with the fact that we [are "modifying" an object we d
 
 ## Tests
 
-You can give test suite for hashMate a quick run through in the browser of your choice [here](http://cdn.rawgit.com/azaslavsky/backbone-hashMate/master/test/jasmine.html).  You can also view results from local [Chrome tests](http://cdn.rawgit.com/azaslavsky/backbone-hashMate/master/test/results/spec/chrome.html), or the entire [browser compatibility suite]((http://cdn.rawgit.com/azaslavsky/backbone-hashMate/master/test/results/spec/chrome.html).
+You can give test suite for hashMate a quick run through in the browser of your choice [here](http://cdn.rawgit.com/azaslavsky/backbone-hashMate/v0.1.0/test/jasmine.html).  You can also view results from local [Chrome tests](http://cdn.rawgit.com/azaslavsky/backbone-hashMate/master/test/results/spec/chrome.html), or the entire [browser compatibility suite](http://cdn.rawgit.com/azaslavsky/backbone-hashMate/master/test/results/spec/chrome.html).
 
 ## Contributing
 
@@ -284,3 +300,26 @@ If you make changes that you feel need to be documented in the readme, please up
 ```
 gulp docs
 ```
+
+## License
+The MIT License (MIT)
+
+Copyright (c) 2014 Alex Zaslavksy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
