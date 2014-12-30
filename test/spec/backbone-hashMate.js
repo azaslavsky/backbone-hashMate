@@ -523,6 +523,21 @@
 					expect(window.location.hash).toBe('#' + output);
 					expect(Backbone.history.hashString).toBe(output);
 				});
+
+				it('should allow both arguments to be optional', function(){
+					//No fragment
+					Backbone.history.navigate({
+						addHash: 'testA/1=a',
+						trigger: false
+					});
+
+					expect(window.location.hash).toBe('#testA/1=a');
+
+					//No options
+					Backbone.history.navigate('abc');
+					expect(window.location.pathname).toBe('/abc');
+					expect(window.location.hash).toBe('#testA/1=a');
+				});
 			});
 		});
 	});

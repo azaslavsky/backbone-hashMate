@@ -15,34 +15,43 @@
     }
 })(this, function(root, Backbone, _) {
     "use strict";
-    var start = Backbone.History.prototype.start;
+    var defaultHistory = {
+        start: Backbone.History.prototype.start,
+        atRoot: Backbone.History.prototype.atRoot,
+        navigate: Backbone.History.prototype.navigate
+    };
     Backbone.History.prototype.start = function(options) {
         var prototype = this.prototype || this.__proto__;
         this.checkUrl = prototype.checkUrl.bind(this);
         options.hashChange = options.hashMate ? true : options.hashChange;
         this._hasHashMate = !!options.hashMate;
         this._noRootCheck = true;
-        var loaded = start.call(this, options);
+        var loaded = defaultHistory.start.call(this, options);
         delete this._noRootCheck;
         return loaded;
     };
-    var atRoot = Backbone.History.prototype.atRoot;
     Backbone.History.prototype.atRoot = function() {
         if (this._hasHashMate && this._noRootCheck) {
             return false;
         } else {
-            return atRoot.call(this);
+            return defaultHistory.atRoot.call(this);
         }
     };
     Backbone.History.prototype.checkUrl = function(e) {
         if (this.getFragment() === this.fragment && (this.hashString === this.getHashString() || !this._hasHashMate)) {
             return false;
         }
+        if (this.navigationInProgress) {
+            return false;
+        }
         this.hashString = this.getHashString();
         this.loadUrl();
     };
-    var navigate = Backbone.History.prototype.navigate;
     Backbone.History.prototype.navigate = function(fragment, opts) {
+        if (typeof fragment === "object" && !opts) {
+            opts = fragment;
+            fragment = this.fragment;
+        }
         opts = opts || {};
         var hash = "";
         this.navigationInProgress = true;
@@ -60,7 +69,7 @@
             this.navigationInProgress = false;
             return;
         }
-        navigate.call(this, fragment + "#" + hash, opts);
+        defaultHistory.navigate.call(this, fragment + "#" + hash, opts);
         this.hashString = hash;
         this.navigationInProgress = false;
     };
@@ -209,8 +218,10 @@
         encoded = encoded && encoded.length ? encoded.join("&") : "";
         opts = opts || {};
         if (opts.apply !== false) {
+            this.navigationInProgress = true;
             this._updateHash(this.location || window.location, encoded, opts.replace);
             this.hashString = encoded;
+            this.navigationInProgress = false;
         }
         return encoded;
     };

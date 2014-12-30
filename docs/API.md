@@ -6,7 +6,7 @@ An extended version of the default Backbone.History API
 
 * [class: Backbone.History](#Backbone.History)
   * [history.start(options)](#Backbone.History#start)
-  * [history.navigate(fragment, [opts])](#Backbone.History#navigate)
+  * [history.navigate([fragment], [opts])](#Backbone.History#navigate)
   * [history.deleteHash([opts], [target])](#Backbone.History#deleteHash)
   * [history.pluckHash([params], [group])](#Backbone.History#pluckHash)
   * [history.setHash(params, [target], [opts])](#Backbone.History#setHash)
@@ -28,12 +28,12 @@ Extension of the default startup functionality; wraps the default method, availa
 <a name="Backbone.History#navigate"></a>
 
 * * *
-####history.navigate(fragment, [opts])
+####history.navigate([fragment], [opts])
 Extension of the default navigation functionality; wraps the default method, available at: http://backbonejs.org/#Router-navigate
 
 **Params**
 
-- fragment `string` - The new fragment  
+- \[fragment\] `string` - The new fragment  
 - \[opts\] `Object` - An extended version of the default options object, with the following properties available  
   - \[deleteHash=false\] `boolean` | `Object` - True means we reset the entire hash, false means that nothing is cleared  
   - \[globals=false\] `boolean` | `Array.<string>` - Setting true will clear all global variables, or an array can be specified for more granular deletion  

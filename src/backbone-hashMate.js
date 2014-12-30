@@ -31,15 +31,39 @@
 	/**
 	 * @namespace Backbone
 	*/
+	
 	/**
 	 * @class Backbone.History
 	 * @classdesc An extended version of the default Backbone.History API
 	 * @memberof Backbone
 	*/
 
+	/**
+	 * If we're navigating to new URL with hashMate, set this flag to true so we don't get into an infinite loop
+	 * @property {boolean} _navigationInProgress
+	 * @memberof Backbone.History
+	 * @private
+	 * @ignore
+	*/
+
+	/**
+	 * Avoid check the root position, but only while we are inside of the ".start()" method in the stack
+	 * @property {boolean} _noRootCheck
+	 * @memberof Backbone.History
+	 * @private
+	 * @ignore
+	*/
 
 
-	var start = Backbone.History.prototype.start;
+
+	var defaultHistory = {
+		start: Backbone.History.prototype.start,
+		atRoot: Backbone.History.prototype.atRoot,
+		navigate: Backbone.History.prototype.navigate
+	};
+
+
+
 	/**
 	 * Extension of the default startup functionality; wraps the default method, available at: http://backbonejs.org/#History-start
 	 * @method
@@ -59,7 +83,7 @@
 		this._noRootCheck = true;
 
 		//Do the default start procedure
-		var loaded = start.call(this, options);
+		var loaded = defaultHistory.start.call(this, options);
 
 		delete this._noRootCheck;
 		return loaded;
@@ -67,7 +91,6 @@
 
 
 
-	var atRoot = Backbone.History.prototype.atRoot;
 	/**
 	 * Replaces the default atRoot method, always returning false duing the Backbone.start() process while hashMate is enabled
 	 * @method
@@ -79,7 +102,7 @@
 		if (this._hasHashMate && this._noRootCheck) {
 			return false;
 		} else {
-			return atRoot.call(this);
+			return defaultHistory.atRoot.call(this);
 		}
 	};
 
@@ -96,6 +119,9 @@
 		if ( this.getFragment() === this.fragment && (this.hashString === this.getHashString() || !this._hasHashMate) ) {
 			return false;
 		}
+		if ( this.navigationInProgress ) {
+			return false;
+		}
 
 		//Update the active hash, then load the Url (the active fragment is updated by the loadUrl method)
 		this.hashString = this.getHashString();
@@ -104,11 +130,10 @@
 
 
 
-	var navigate = Backbone.History.prototype.navigate;
 	/**
 	 * Extension of the default navigation functionality; wraps the default method, available at: http://backbonejs.org/#Router-navigate
 	 * @method
-	 * @param {string} fragment The new fragment
+	 * @param {string} [fragment] The new fragment
 	 * @param {Object} [opts] An extended version of the default options object, with the following properties available
 	 * @param {boolean|Object} [opts.deleteHash=false] True means we reset the entire hash, false means that nothing is cleared
 	 * @param {boolean|string[]} [opts.deleteHash.globals=false] Setting true will clear all global variables, or an array can be specified for more granular deletion
@@ -120,6 +145,10 @@
 	 * @memberof Backbone.History
 	*/
 	Backbone.History.prototype.navigate = function(fragment, opts){
+		if (typeof fragment === 'object' && !opts) {
+			opts = fragment;
+			fragment = this.fragment;
+		}
 		opts = opts || {};
 		var hash = '';
 
@@ -142,7 +171,7 @@
 		}
 
 		//Fire the default navigate method, and update the current hash value
-		navigate.call(this, fragment+'#'+hash, opts);
+		defaultHistory.navigate.call(this, fragment+'#'+hash, opts);
 		this.hashString = hash;
 
 		//Re-enable the hashMate hashchange listener
@@ -414,8 +443,10 @@
 		//Apply if necessary, and return
 		opts = opts || {};
 		if (opts.apply !== false) {
+			this.navigationInProgress = true;
 			this._updateHash( (this.location || window.location), encoded, opts.replace);
 			this.hashString = encoded;
+			this.navigationInProgress = false;
 		}
 		return encoded;
 	};
