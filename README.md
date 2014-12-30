@@ -1,12 +1,15 @@
 # backbone-hashMate
 =================
-[![License](https://img.shields.io/cocoapods/l/AFNetworking.svg)](https://github.com/azaslavsky/TextStack#license) [![Bower version](https://badge.fury.io/bo/backbone-hashmate.svg)](http://badge.fury.io/bo/backbone-hashmate) [![npm version](https://badge.fury.io/js/backbone-hashmate.svg)](http://badge.fury.io/js/backbone-hashmate) [![Dependencies](https://david-dm.org/azaslavsky/backbone-hashMate/status.svg)](https://david-dm.org/azaslavsky/backbone-hashMate#info=dependencies&view=table) [![Coverage Status](https://img.shields.io/coveralls/azaslavsky/backbone-hashMate.svg)](https://coveralls.io/r/azaslavsky/backbone-hashMate?branch=master) [![Travis Build](https://api.travis-ci.org/azaslavsky/backbone-hashMate.svg)](https://travis-ci.org/azaslavsky/backbone-hashMate) 
+[![License](https://img.shields.io/cocoapods/l/AFNetworking.svg)](https://github.com/azaslavsky/TextStack#license) [![Bower version](https://badge.fury.io/bo/backbone-hashmate.svg)](http://badge.fury.io/bo/backbone-hashmate) [![npm version](https://badge.fury.io/js/backbone-hashmate.svg)](http://badge.fury.io/js/backbone-hashmate) [![Coverage Status](https://img.shields.io/coveralls/azaslavsky/backbone-hashMate.svg)](https://coveralls.io/r/azaslavsky/backbone-hashMate?branch=master) [![Dependencies](https://david-dm.org/azaslavsky/backbone-hashMate/status.svg)](https://david-dm.org/azaslavsky/backbone-hashMate#info=dependencies&view=table) [![Travis Build](https://api.travis-ci.org/azaslavsky/backbone-hashMate.svg)](https://travis-ci.org/azaslavsky/backbone-hashMate) 
+
+__[Check out the demo!](azaslavsky.github.io/backbone-hashMate/demo)__
 
 Like [jQuery BBQ](http://benalman.com/projects/jquery-bbq-plugin/), but for Backbone.  HashMate extends Backbone.History to store and respond to information contained in the URL's hash fragment.  Useful for state management, referral handling, history, SEO, and more.
 
 ## Jump To
 * [Description](#description)
 * [Installation](#installation)
+* [Demo](#demo)
 * [Usage](#usage)
 * [API](#api)
 * [Warnings](#warnings)
@@ -42,6 +45,17 @@ or just download this repo manually and include the file as a dependency.  Make 
 <script src="./lib/backbone.js"></script>
 <script src="./lib/backbone-hashMate.js"></script>
 ```
+
+## Demo
+You can check out a working demo at [azaslavsky.github.io/backbone-hashMate/demo](azaslavsky.github.io/backbone-hashMate/demo).  While this works fine, there is a drawback: since gitbhub pages don't support aliases by default, the only entry point to the single page demo app is at `/backbone-hashMate/demo`.  URLs like `/backbone-hashMate/demo/article/Some_Title` and `/backbone-hashMate/demo/options` return a 404, even though there is routing support for them.
+
+A better way to fire up the demo is to install the repository locally, then run the following in the CLI:
+
+```
+node demo/server.js
+```
+
+Then, point your browser to `localhost:4040/backbone-hashMate/demo`, or any of the other valid paths mentioned above.
 
 ## Usage
 
@@ -120,7 +134,7 @@ An extended version of the default Backbone.History API
 
 * [class: Backbone.History](#Backbone.History)
   * [history.start(options)](#Backbone.History#start)
-  * [history.navigate(fragment, [opts])](#Backbone.History#navigate)
+  * [history.navigate([fragment], [opts])](#Backbone.History#navigate)
   * [history.deleteHash([opts], [target])](#Backbone.History#deleteHash)
   * [history.pluckHash([params], [group])](#Backbone.History#pluckHash)
   * [history.setHash(params, [target], [opts])](#Backbone.History#setHash)
@@ -142,12 +156,12 @@ Extension of the default startup functionality; wraps the default method, availa
 <a name="Backbone.History#navigate"></a>
 
 * * *
-####history.navigate(fragment, [opts])
+####history.navigate([fragment], [opts])
 Extension of the default navigation functionality; wraps the default method, available at: http://backbonejs.org/#Router-navigate
 
 **Params**
 
-- fragment `string` - The new fragment  
+- \[fragment\] `string` - The new fragment  
 - \[opts\] `Object` - An extended version of the default options object, with the following properties available  
   - \[deleteHash=false\] `boolean` | `Object` - True means we reset the entire hash, false means that nothing is cleared  
   - \[globals=false\] `boolean` | `Array.<string>` - Setting true will clear all global variables, or an array can be specified for more granular deletion  
@@ -286,3 +300,26 @@ If you make changes that you feel need to be documented in the readme, please up
 ```
 gulp docs
 ```
+
+## License
+The MIT License (MIT)
+
+Copyright (c) 2014 Alex Zaslavksy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
