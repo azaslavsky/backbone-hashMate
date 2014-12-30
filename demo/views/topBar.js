@@ -6,7 +6,7 @@
 		tagName: 'div',
 
 		events: {
-			'click #TopTheme': 'clickTheme',
+			'click #TopTheme': 'changeTheme',
 			'click .topTab': 'changeTab'
 		},
 
@@ -14,7 +14,8 @@
 			this.render();
 
 			//Bind model events
-			this.listenTo(this.model, 'change:theme', this.animateTheme);
+			this.listenTo(this.model, 'change:theme', this.renderTheme);
+			this.listenTo(this.model, 'change:tab', this.renderTab);
 		},
 
 		render: function() {
@@ -41,26 +42,29 @@
 
 		//Change the tab
 		changeTab: function(e) {
-			var $el = $(e.currentTarget)
-			var newTab = $el.attr('data-tab');
-			if (this.model.tab !== newTab) {
-				this.model.set('tab', newTab);
-				this.$('.topTab').removeClass('selected');
-				$el.addClass('selected');
-			}
+			var newTab = $(e.currentTarget).attr('data-tab');
+			this.model.tab !== newTab && this.model.set('tab', newTab);
+		},
+
+		//Render the tab selection
+		renderTab: function(model, value) {
+			this.$('.topTab').removeClass('selected');
+			this.$('.topTab[data-tab="'+ value +'"]').addClass('selected');
 		},
 
 		//Change the theme
-		clickTheme: function(e) {
+		changeTheme: function(e) {
 			var newTheme = this.model.get('theme') === 'white' ? 'dark' : 'white';
 			this.model.set('theme', newTheme);
+
+			//Update hash
 			Backbone.history.setHash({
 				'theme': newTheme
 			});
 		},
 
 		//Respond to theme changes
-		animateTheme: function(model, value) {
+		renderTheme: function(model, value) {
 			if (value === 'dark') {
 				this.$('.themeWhite').css('margin-top', '-24px');
 			} else {

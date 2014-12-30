@@ -5,7 +5,7 @@
 	modules.AppModel = Backbone.Model.extend({
 		defaults: {
 			theme: 'white',
-			tab: 'article'
+			tab: null
 		}
 	});
 })();

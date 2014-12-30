@@ -19,6 +19,7 @@
 
 			//Bind model events
 			this.listenTo(this.model, 'change:theme', this.theme);
+			this.listenTo(this.model, 'change:tab', this.tab);
 
 			//Deal with global parameters
 			if (params) {
@@ -49,6 +50,34 @@
 			} else {
 				this.$el.removeClass('dark');
 			}
+		},
+
+		//Load a new tab
+		tab: function(model, value) {
+			model && model._previousAttributes.tab && Backbone.history.navigate(value, {
+				trigger: true
+			});
+		},
+
+		//Activate a new tab
+		activate: function(view){
+			var main = this.$('#Main');
+
+			//Delete the old view
+			if (App.view.active) {
+				//Clear the old view's hash group
+				Backbone.history.deleteHash({
+					groups: App.view.active.name
+				});
+
+				//Note - doing just this without cleaning up the model first could cause memory leaks, but its a sample app, so screw it
+				App.view.active.remove();
+			}
+
+			//Append the new view
+			main.append(view.$el);
+			App.view.active = view;
+			!App.model.get('tab') && App.model.set('tab', App.view.active.name);
 		}
 	});
 })();

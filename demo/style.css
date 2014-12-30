@@ -2,9 +2,16 @@
 * {
 	transition-property: background;
 	transition-duration: 0.5s;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 }
 html, body {
-
+	height: 100%;
+	width: 100%;
+}
+h4 {
+	margin: 0;
 }
 
 
@@ -21,7 +28,19 @@ html, body {
 }
 #Main {
 	top: 44px;
-	bottom: 0;
+	min-height: calc(100% - 44px);
+	position: relative;
+	display: flex;
+	justify-content: center;
+}
+#Main>.content {
+	width: 100%;
+	max-width: 920px;
+	min-height: 100%;
+	background: #EEE;
+	border-left: 1px solid #BBB;
+	border-right: 1px solid #BBB;
+	padding: 2px 20px;
 }
 
 
@@ -50,13 +69,13 @@ html, body {
 
 .topTab {
 	margin-left: 12px;
-	padding: 10px;
-	cursor: pointer;
-	margin-bottom: -1px;
+	position: relative;
+	bottom: 7px;
+	padding: 4px 10px 2px 10px;
 	border: 1px solid transparent;
-	border-top-left-radius: 8px;
-	border-top-right-radius: 8px;
+	border-radius: 8px;
 	transition: none;
+	cursor: pointer;
 }
 .topTab:hover {
 	background: #222;
@@ -68,6 +87,9 @@ html, body {
 }
 .topTabIcon {
 	margin-right: 8px;
+}
+.topTab>span, .topTab>i {
+	cursor: pointer;
 }
 
 #TopTheme {
@@ -90,7 +112,7 @@ html, body {
 	height: 26px;
 	margin-left: 8px;
 	margin-top: -1px;
-	border-radius: 16px;
+	border-radius: 8px;
 	background: white;
 	color: black;
 }
@@ -106,6 +128,122 @@ html, body {
 
 
 
+/* Article */
+.articleInfo {
+	margin-bottom: 32px;
+	font-size: 14px;
+	font-style: italic;
+	color: #444;
+}
+.articleBy {
+	margin-right: 12px;
+}
+.articleImg {
+	display: flex;
+}
+
+.articleImgControls {
+	display: flex;
+	justify-content: space-between;
+	width: calc(100% - 24px);
+	margin: 12px 12px 0 12px;
+	height: 36px;
+}
+.articleImgSize {
+	width: 30%;
+	height: 100%;
+	background: #EEE;
+	border: 1px solid #CCC;
+	border-radius: 8px;
+	cursor: pointer;
+}
+.articleImgSize.selected {
+	background: white;
+	border-color: #AAA;
+}
+.articleImgSize>button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	background: none;
+	border: none;
+	font-size: 12px;
+	font-weight: bold;
+}
+.articleImgSize>button>i {
+	margin-right: 6px;
+}
+.articleImgSize>button[data-size="small"]>i {
+	font-size: 14px;
+}
+.articleImgSize>button[data-size="medium"]>i {
+	font-size: 21px;
+}
+.articleImgSize>button[data-size="large"]>i {
+	font-size: 28px;
+}
+
+.articleImgContainer {
+	display: inline-block;
+	margin: auto;
+	width: 50%;
+	background: #DDD;
+	border: #AAA solid 1px;
+	color: #555;
+}
+.articleImgContainer>img {
+	width: 100%;
+	padding: 12px;
+}
+
+
+
+
+/* Options */
+.optBox {
+	margin-bottom: 20px;
+}
+.optBoxTitle {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	background: #DDD;
+	border: #AAA solid 1px;
+	color: #555;
+	padding: 8px 16px;
+	cursor: pointer;
+}
+.optBoxTitle>h4 {
+	flex-grow: 1;
+	margin: 0;
+}
+.optBoxBody {
+	height: auto;
+	overflow: hidden;
+	padding: 16px;
+	padding-bottom: 8px;
+	background: white;
+	border: 1px solid #BBB;
+	border-top: none;
+}
+.collapsed .optBoxBody {
+	height: 0px;
+	padding: 0 16px;
+	border: none;
+}
+.optField {
+	margin-bottom: 12px;
+}
+.optField span {
+	display: inline-block;
+	min-width: 180px;
+}
+
+
+
+
 /* Dark theme */
 .dark #Nav {
 	background: white;
@@ -114,6 +252,11 @@ html, body {
 	background: black;
 	color: white;
 }
+.dark #Main>.content {
+	background: #111;
+	border-color: #333;
+}
+
 .dark #TopBar {
 	color: black;
 	background: white;
@@ -129,4 +272,36 @@ html, body {
 .dark .themeBubble {
 	background: black;
 	color: white;
+}
+
+.dark .articleInfo {
+	color: #AAA;
+}
+.dark .articleImgContainer {
+	background: #222;
+	border-color: #444;
+}
+.dark .articleImgSize {
+	background: #111;
+	border-color: #555;
+	color: #AAA;
+}
+.dark .articleImgSize.selected {
+	background: #333;
+	border-color: #AAA;
+	color: white;
+}
+
+.dark .optBoxTitle {
+	background: #111;
+	border-color: #555;
+	color: #AAA;
+}
+.dark .optBoxBody {
+	background: #222;
+	border-color: #444;
+	color: #CCC;
+}
+.dark .optBoxBody select {
+	color: black;
 }
