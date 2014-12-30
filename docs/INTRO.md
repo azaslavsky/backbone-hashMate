@@ -1,12 +1,15 @@
 # backbone-hashMate
 =================
-[![License](https://img.shields.io/cocoapods/l/AFNetworking.svg)](https://github.com/azaslavsky/TextStack#license) [![Bower version](https://badge.fury.io/bo/backbone-hashmate.svg)](http://badge.fury.io/bo/backbone-hashmate) [![npm version](https://badge.fury.io/js/backbone-hashmate.svg)](http://badge.fury.io/js/backbone-hashmate) [![Dependencies](https://david-dm.org/azaslavsky/backbone-hashMate/status.svg)](https://david-dm.org/azaslavsky/backbone-hashMate#info=dependencies&view=table) [![Coverage Status](https://img.shields.io/coveralls/azaslavsky/backbone-hashMate.svg)](https://coveralls.io/r/azaslavsky/backbone-hashMate?branch=master) [![Travis Build](https://api.travis-ci.org/azaslavsky/backbone-hashMate.svg)](https://travis-ci.org/azaslavsky/backbone-hashMate) 
+[![License](https://img.shields.io/cocoapods/l/AFNetworking.svg)](https://github.com/azaslavsky/TextStack#license) [![Bower version](https://badge.fury.io/bo/backbone-hashmate.svg)](http://badge.fury.io/bo/backbone-hashmate) [![npm version](https://badge.fury.io/js/backbone-hashmate.svg)](http://badge.fury.io/js/backbone-hashmate) [![Coverage Status](https://img.shields.io/coveralls/azaslavsky/backbone-hashMate.svg)](https://coveralls.io/r/azaslavsky/backbone-hashMate?branch=master) [![Dependencies](https://david-dm.org/azaslavsky/backbone-hashMate/status.svg)](https://david-dm.org/azaslavsky/backbone-hashMate#info=dependencies&view=table) [![Travis Build](https://api.travis-ci.org/azaslavsky/backbone-hashMate.svg)](https://travis-ci.org/azaslavsky/backbone-hashMate) 
+
+__[Check out the demo!](azaslavsky.github.io/backbone-hashMate/demo)__
 
 Like [jQuery BBQ](http://benalman.com/projects/jquery-bbq-plugin/), but for Backbone.  HashMate extends Backbone.History to store and respond to information contained in the URL's hash fragment.  Useful for state management, referral handling, history, SEO, and more.
 
 ## Jump To
 * [Description](#description)
 * [Installation](#installation)
+* [Demo](#demo)
 * [Usage](#usage)
 * [API](#api)
 * [Warnings](#warnings)
@@ -42,3 +45,14 @@ or just download this repo manually and include the file as a dependency.  Make 
 <script src="./lib/backbone.js"></script>
 <script src="./lib/backbone-hashMate.js"></script>
 ```
+
+## Demo
+You can check out a working demo at [azaslavsky.github.io/backbone-hashMate/demo](azaslavsky.github.io/backbone-hashMate/demo).  While this works fine, there is a drawback: since gitbhub pages don't support aliases by default, the only entry point to the single page demo app is at `/backbone-hashMate/demo`.  URLs like `/backbone-hashMate/demo/article/Some_Title` and `/backbone-hashMate/demo/options` return a 404, even though there is routing support for them.
+
+A better way to fire up the demo is to install the repository locally, then run the following in the CLI:
+
+```
+node demo/server.js
+```
+
+Then, point your browser to `localhost:4040/backbone-hashMate/demo`, or any of the other valid paths mentioned above.

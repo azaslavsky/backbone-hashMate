@@ -6,8 +6,8 @@ logger.setLevel(log4js.levels.DEBUG);
 // Document-Root: './public' directory
 var fileServer = new staticAlias.Server('./', {
   alias: {
-    match: '/',
-    serve: 'test/jasmine.html',
+    match: /^\/backbone-hashMate\/demo\/{0,1}.*$/i, //https://regex101.com/r/aC7iY1/1
+    serve: 'demo/index.html',
     logger: logger
   }
 });
@@ -16,5 +16,5 @@ require('http').createServer(function(request, response) {
   request.addListener('end', function() {
     fileServer.serve(request, response);
   }).resume();
-}).listen(5050);
+}).listen(4040);
 console.log('Server running at http://localhost:4040/');
