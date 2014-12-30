@@ -1,6 +1,6 @@
 {
   "name": "backbone-hashMate",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Like jQuery BBQ, but for Backbone. HashMate extends Backbone.Router to store and respond to information contained in the URL's hash fragment. Useful for state management, referral handling, history and more.",
   "main": "dist/backbone-hashMate.js",
   "license": "MIT",
@@ -23,10 +23,10 @@
   "ignore": [
     ".*",
     "node_modules/",
+    "demo/",
     "docs/",
     "src/",
     "test/",
-    "*.conf.js",
     "*.md",
     "npm-debug.txt",
     "gulpfile.js",
