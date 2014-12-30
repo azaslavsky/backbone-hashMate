@@ -9,18 +9,18 @@
     <h1>Unit Test Results</h1>
     <table cellspacing="0" cellpadding="0" border="0">
       <tr class="overview">
-        <td colspan="3" title="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36">Browser: Chrome 39.0.2171 (Windows 7)</td>
+        <td colspan="3" title="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36">Browser: Chrome 39.0.2171 (Windows 7)</td>
       </tr>
       <tr class="overview">
-        <td colspan="3">Timestamp: 2014-12-20T13:58:48</td>
+        <td colspan="3">Timestamp: 2014-12-30T05:59:13</td>
       </tr>
       <tr>
         <td colspan="3">
-          14 tests / 
+          36 tests / 
           0 errors / 
           0 failures / 
           0 skipped / 
-          runtime: 0.404s
+          runtime: 0.981s
         </td>
       </tr>
       <tr class="header">
@@ -29,73 +29,183 @@
         <td>Suite / Results</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.034s</td>
+        <td>Passed in 0.031s</td>
+        <td>should return a supplied hash string, without the pound symbol</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for getting a whole hash string</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.031s</td>
+        <td>should return the window&apos;s currently set hash value if the supplied argument is omitted or incorrect</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for getting a whole hash string</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.025s</td>
+        <td>should match two arbitrary strings</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for matching a hash string</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.026s</td>
+        <td>should match an arbitrary string against the current hash string</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for matching a hash string</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.025s</td>
+        <td>should parse both key value pairs and lone keys</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for parsing a hash string</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.025s</td>
+        <td>should produce a JSON compatible object</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for parsing a hash string</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.026s</td>
+        <td>should be able to set an encoded object of parameters</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for setting a hash string</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.025s</td>
+        <td>should be able to apply the hash string immediately</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for setting a hash string</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.025s</td>
+        <td>should update an existing hash value</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for setting hash parameters</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.026s</td>
+        <td>should create a new hash value</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for setting hash parameters</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.029s</td>
+        <td>should accept both strings and object literals</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for setting hash parameters</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.025s</td>
+        <td>should be able to return both a JSON-literal and stringified representation of the results</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for setting hash parameters</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.028s</td>
+        <td>should apply to window.location by defualt, but also be able to set on arbitrary strings</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for setting hash parameters</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.025s</td>
+        <td>should return an object containing all the global hash values</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for plucking hash parameters</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.031s</td>
+        <td>should return an object containing a specified global hash value</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for plucking hash parameters</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.024s</td>
+        <td>should return an object containing all the hash values from a certain group</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for plucking hash parameters</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.025s</td>
+        <td>should return an object containing the specified hash value from a certain group</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for plucking hash parameters</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.026s</td>
+        <td>should return a mixed set of specified hash parameters</td>
+        <td>Backbone HashMate &raquo; Extended Backbone.History API functionality &raquo; for plucking hash parameters</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.024s</td>
         <td>should initialize a single history tracker</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for "start" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.043s</td>
+        <td>Passed in 0.027s</td>
         <td>should initialize hash change events if the &quot;hashMate&quot; option is true</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for "start" method</td>
       </tr>
       <tr class="pass">
+        <td>Passed in 0.025s</td>
+        <td>should always return false when hashMate is enabled and the appropriate flag is set</td>
+        <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for "atRoot" method</td>
+      </tr>
+      <tr class="pass">
         <td>Passed in 0.026s</td>
+        <td>should retain default functionality when hashMate is loaded, but disabled</td>
+        <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for "atRoot" method</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.025s</td>
         <td>should ignore unchaged URL fragments</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for "checkUrl" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.023s</td>
+        <td>Passed in 0.025s</td>
         <td>should trigger a navigation event when a new URL fragment is loaded</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for "checkUrl" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.024s</td>
+        <td>Passed in 0.025s</td>
         <td>should still trigger new routes</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.024s</td>
+        <td>Passed in 0.025s</td>
         <td>should still replace existing routes</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.024s</td>
+        <td>Passed in 0.025s</td>
         <td>should be able to force a trigger on unchanged routes</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.027s</td>
+        <td>Passed in 0.028s</td>
         <td>should be able to clear the entire hash string</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.034s</td>
-        <td>should be able to clear one or more global hash parameters</td>
+        <td>Passed in 0.028s</td>
+        <td>should be able to clear all the global hash parameters</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.028s</td>
+        <td>Passed in 0.031s</td>
         <td>should be able to clear one or more specified grouping of hash parameters</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.028s</td>
-        <td>should be able to clear a combination of groups and global parameters</td>
+        <td>Passed in 0.024s</td>
+        <td>should be able to clear a combination of whole groups and global parameters</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.034s</td>
+        <td>Passed in 0.043s</td>
+        <td>should be able to clear a specific list of parameters</td>
+        <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.031s</td>
         <td>should be able to set a hash string</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.028s</td>
+        <td>Passed in 0.038s</td>
         <td>should be able to change an existing hash string</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
       </tr>
       <tr class="pass">
-        <td>Passed in 0.027s</td>
+        <td>Passed in 0.028s</td>
         <td>should be able to set multiple hash parameters</td>
+        <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
+      </tr>
+      <tr class="pass">
+        <td>Passed in 0.025s</td>
+        <td>should allow both arguments to be optional</td>
         <td>Backbone HashMate &raquo; Native Backbone.History API functionality &raquo; for navigate" method</td>
       </tr>
     </table>
